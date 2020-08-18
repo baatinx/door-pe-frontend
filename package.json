@@ -19,5 +19,12 @@
   "devDependencies": {
     "shadow-cljs": "2.10.21"
   },
-  "dependencies": {}
+  "dependencies": {
+    "reakit": "1.2.2",
+    "@smooth-ui/core-sc": "11.1.5",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "styled-components": "^4.0.0",
+    "styled-icons": "^10.17.0"
+  }
 }
