@@ -1,7 +1,21 @@
 {
   "name": "doorpe.frontend.app",
   "version": "0.0.1",
+  "description": "-",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/themustafabasit/door-pe-frontend"
+  },
+  "author": {
+    "name": "Mustafa Basit",
+    "email": "mailtobasit74@gmail.com"
+  },
+  "license": "-",
+  "scripts": {
+    "dev": "shadow-cljs watch frontend",
+    "release": "shadow-cljs release frontend"
+  },
   "devDependencies": {
     "shadow-cljs": "2.10.21"
   },
