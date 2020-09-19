@@ -5,11 +5,14 @@
   "src/test"]
 
  :dependencies
- [[reagent "0.10.0"]]
+ [[binaryage/devtools "1.0.2"]
+  [reagent "0.10.0"]
+  [clj-commons/secretary "1.2.4"]
+  [venantius/accountant "0.2.5"]
+  [cljs-http "0.1.46"]]
 
  :dev-http {8000 "public"}
  :builds
  {:frontend
   {:target :browser
-   :modules {:main {:init-fn doorpe.frontend.app/init}}
-   }}}
+   :modules {:main {:init-fn doorpe.frontend.app/init}}}}}

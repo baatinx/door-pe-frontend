@@ -1,60 +1,50 @@
 (ns doorpe.frontend.app
-  (:require [reagent.dom :as reagent]
-            [reagent.core]
-            ["@material-ui/core" :refer [Button Checkbox FormControlLabel TextField]]
-            ["@material-ui/pickers" :refer [DatePicker]]))
+  (:require-macros [secretary.core :refer [defroute]])
+  (:require [reagent.dom :as reagent-dom]
+            [secretary.core :as secretary]
+            [accountant.core :as accountant]
+            [reagent.core :as reagent]
 
-(defn greet
-  [name]
-  (js/alert "welcome " name))
+            [doorpe.frontend.nav.nav :refer [nav]]
+            [doorpe.frontend.footer.footer :refer [footer]]
 
-(defn two-br
+            [doorpe.frontend.handler :as handler]))
+
+(defonce page (reagent/atom handler/home))
+
+(defn current-page
   []
-  [:<>
-   [:br]
-   [:br]])
+  [:div
+   [nav]
+   [@page]
+   [footer]])
 
-(defn title
-  "returns a 'p' tag with a custom message in it + few new-lines"
-  [msg]
-  [:<>
-   [two-br]
-   [two-br]
-   [:p [:b msg]]])
+;; routes
+(secretary/defroute "/" []
+  (reset! page handler/home))
 
+(secretary/defroute "/register-as-customer" []
+  (reset! page handler/register-as-customer))
 
-(defn app
-  []
-  [:<>
-   [:p [:b "Basic Button"]]
-   [:> Button {:variant "contained"
-               :color "primary"
-               :on-click #(js/alert "clicked")}
-    "click me"]
+(secretary/defroute "/login" []
+  (reset! page handler/login))
 
-   [title "Checkboxes"]
-   [:> Checkbox]
-   [:> Checkbox {:disabled "true"}]
-   [:> Checkbox {:checked true
-                 :color "primary"}]
-   
-  
-   [:> FormControlLabel {:control (reagent.core/as-element [:> Checkbox])
-                         :label "Checkbox with label control"}] 
-   
-   [title "Text Boxes"]
-   [:> TextField {:label "standard"}]
-   
-   [two-br]
-   [:> TextField {:variant "outlined"
-                  :label "outlined"}]
-   
-   [two-br]])
+(secretary/defroute "/complaint" []
+  (reset! page handler/complaint))
+
+(secretary/defroute "/feedback" []
+  (reset! page handler/feedback))
 
 (defn ^:dev/after-load start
   []
-  (reagent/render [app]
-            (.getElementById js/document "root")))
+  (accountant/configure-navigation!
+   {:nav-handler (fn [path]
+                   (secretary/dispatch! path))
+    :path-exists? (fn [path]
+                    (secretary/locate-route path))
+    :reload-same-path? true})
+  (reagent-dom/render [current-page]
+                      (.getElementById js/document "application")))
 
 (defn ^:export init
   []
