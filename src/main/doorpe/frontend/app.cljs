@@ -8,9 +8,13 @@
             [doorpe.frontend.nav.nav :refer [nav]]
             [doorpe.frontend.footer.footer :refer [footer]]
 
-            [doorpe.frontend.handler :as handler]))
+            [doorpe.frontend.handler :refer [home
+                                             register-as-customer
+                                             login
+                                             complaint
+                                             feedback]]))
 
-(defonce page (reagent/atom handler/home))
+(defonce page (reagent/atom #'home))
 
 (defn current-page
   []
@@ -20,23 +24,27 @@
    [footer]])
 
 ;; routes
-(secretary/defroute "/" []
-  (reset! page handler/home))
+(defn app-routes
+  []
+  (secretary/defroute "/" []
+    (reset! page #'home))
 
-(secretary/defroute "/register-as-customer" []
-  (reset! page handler/register-as-customer))
+  (secretary/defroute "/register-as-customer" []
+    (reset! page #'register-as-customer))
 
-(secretary/defroute "/login" []
-  (reset! page handler/login))
+  (secretary/defroute "/login" []
+    (reset! page #'login))
 
-(secretary/defroute "/complaint" []
-  (reset! page handler/complaint))
+  (secretary/defroute "/complaint" []
+    (reset! page #'complaint))
 
-(secretary/defroute "/feedback" []
-  (reset! page handler/feedback))
+  (secretary/defroute "/feedback" []
+    (reset! page #'feedback)))
+
 
 (defn ^:dev/after-load start
   []
+  (app-routes)
   (accountant/configure-navigation!
    {:nav-handler (fn [path]
                    (secretary/dispatch! path))

@@ -2,15 +2,15 @@
 
 (defn home []
   [:div
-   [:h2 "This is public Home page......"]])
+   [:h2 "This is public Home page.."]])
 
 (defn register-as-customer []
   [:div
-   [:h2 "This is Register page"]])
+   [:h2 "This is Register"]])
 
 (defn login []
   [:div
-   [:h2 "This is Login page"]])
+   [:h2 "This is Login page....."]])
 
 (defn complaint []
   [:div
