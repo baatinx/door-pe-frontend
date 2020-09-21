@@ -9,6 +9,7 @@
   [reagent "0.10.0"]
   [clj-commons/secretary "1.2.4"]
   [venantius/accountant "0.2.5"]
+;;   [cljs-ajax "0.8.1"]
   [cljs-http "0.1.46"]]
 
  :dev-http {8000 "public"}
