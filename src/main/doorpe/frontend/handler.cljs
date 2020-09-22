@@ -5,6 +5,7 @@
             [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
             [doorpe.frontend.components.util :refer [two-br three-br]]
+            [doorpe.frontend.auth.auth :as auth]
             ["@material-ui/core" :refer [Container Typography TextField Button MenuItem
                                          Select FormControl  Grid Card CardContent CardAction]]))
 
@@ -57,11 +58,14 @@
         values (r/atom initial-vaules)]
     [:> Container {:maxWidht "xs"
                    :style {:margin-top :20px}}
-     [:p
+     [:> Typography {:variant :h6}
       "User Registration"]
+
+     [:br]
+
      [:div
       [:> TextField {:variant :outlined
-                     :label "Name"
+                     :label "Full Name"
                      :type :text
                      :id :name
                      :on-change #(swap! values assoc :name (.. % -target -value))
@@ -76,22 +80,22 @@
                      :helperText ""}]
       [two-br]
 
-      [:> TextField {:variant "outlined"
+      [:> TextField {:variant :outlined
                      :label "Choose District"
-                     :select "true"
+                     :select :true
                      :on-change #(swap! values assoc :district (.. % -target -value))
-                     :id "address"
+                     :id :address
                      :helperText ""
                      :style {:width :200px}}
-       [:> MenuItem {:value "Srinagar"}
+       [:> MenuItem {:value :Srinagar}
         "Srinagar"]
-       [:> MenuItem {:value "Islamabad"}
+       [:> MenuItem {:value :Islamabad}
         "Islamabad"]
-       [:> MenuItem {:value "Baramullah"}
+       [:> MenuItem {:value :Baramullah}
         "Baramullah"]
-       [:> MenuItem {:value "Kupwara"}
+       [:> MenuItem {:value :Kupwara}
         "Kupwara"]
-       [:> MenuItem {:value "kishtiwar"}
+       [:> MenuItem {:value :kishtiwar}
         "kishtiwar"]]
 
       [two-br]
@@ -99,31 +103,114 @@
       [:> TextField {:variant :outlined
                      :label "Full Address"
                      :on-change #(swap! values assoc :address (.. % -target -value))
-                     :id "address"
+                     :id :address
                      :helperText ""}]
       [two-br]
 
       [:> TextField {:variant :outlined
                      :on-change #(swap! values assoc :password (.. % -target -value))
-                     :label "password"
-                     :type "password"
-                     :id "password"
+                     :label :password
+                     :type :password
+                     :id :password
                      :helperText "Password must include at-least one digit and one uppercase letter"}]
       [two-br]
 
-      [:> Button {:variant "contained"
-                  :color "primary"
+      [:> Button {:variant :contained
+                  :color :primary
                   :on-click #(dispatch-register-as-customer @values)}
        "Register"]]]))
 
-(defn login []
-  [:div
-   [:h2 "This is Login page....."]])
+(defn do-login
+  [{contact :contact password :password}]
+  (reset! auth/auth-state {:authenticated? true
+                           :user-id 1
+                           :user-type 2
+                           :dispatch-view :customer})
+  (accountant/navigate! "/customer/dashboard")
+  (js/console.log @auth/auth-state))
 
-(defn complaint []
+(defn login []
+  (let [initial-vaules {:username "" :password ""}
+        values (r/atom initial-vaules)]
+    [:> Container
+     [:> Typography {:variant :h6}
+      "Login"]
+
+     [:br]
+
+     [:> TextField {:variant :outlined
+                    :label "Phone Number"
+                    :id :contact
+                    :on-change #(swap! values assoc :contact (.. % -target -value))
+                    :helperText "Phone Number should be of 10 digit"}]
+     [two-br]
+     [:> TextField {:variant :outlined
+                    :label "Your Password"
+                    :on-change #(swap! values assoc :password (.. % -target -value))
+                    :type :password
+                    :id :password
+                    :helperText ""}]
+     [two-br]
+     [:> Button {:variant :contained
+                 :color :primary
+                 :on-click #(do-login @values)}
+      "Login"]]))
+
+(defn book-complaint
+  []
   [:div
    [:h2 "This is Complaint page"]])
+
+
+(defn about-us
+  []
+  [:div
+   [:h2 "This is About Us page"]])
+
+
+(defn contact-us
+  []
+  [:div
+   [:h2 "This is Contact Us page"]])
 
 (defn feedback []
   [:div
    [:h2 "This is Feedback page"]])
+
+
+
+
+
+
+
+
+;; customer handlers
+(defn customer-dashboard
+  []
+  [:div
+   "customer dashboard"])
+
+(defn customer-my-bookings
+  []
+  [:div
+   "customer my bookings"])
+
+(defn customer-my-profile
+  []
+  [:div
+   "customer my profile"])
+
+(defn do-logout
+  []
+  (reset! auth/auth-state {:authenticated? false
+                           :user-id nil
+                           :user-type nil
+                           :dispatch-view :public})
+
+  (accountant/navigate! "/"))
+
+(defn customer-logout
+  []
+  (#(js/setTimeout do-logout 1000))
+  [:> Typography {:variant :h1}
+   " :-( Bye! Logging out ...."])

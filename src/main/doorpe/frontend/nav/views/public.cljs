@@ -1,5 +1,6 @@
 (ns doorpe.frontend.nav.views.public
   (:require ["@material-ui/core" :refer [CssBaseline Box Typography Paper Tabs Container Button AppBar Link Menu MenuItem]]
+            [accountant.core :as accountant]
             [doorpe.frontend.nav.nav-links :refer [nav-link]]))
 
 (defn public
@@ -9,12 +10,16 @@
     [:> Box {:style {:background-color :royalblue}}
      [:> Container
       [nav-link {:text "Home"
-                 :href "/"}]
-      [nav-link {:text "Register"
-                 :href "./register-as-customer"}]
+                 :on-click #(accountant/navigate! "/")}]
+      [nav-link {:text "Register (user)"
+                 :on-click #(accountant/navigate! "/register/as-customer")}]
       [nav-link {:text "Login"
-                 :href "./login"}]
-      [nav-link {:text "Complaint"
-                 :href "./complaint"}]
+                 :on-click #(accountant/navigate! "/login")}]
+      [nav-link {:text "Book Complaint"
+                 :on-click #(accountant/navigate! "/book-complaint")}]
+      [nav-link {:text "About Us"
+                 :on-click #(accountant/navigate! "/about-us")}]
+      [nav-link {:text "Contact Us"
+                 :on-click #(accountant/navigate! "/contact-us")}]
       [nav-link {:text "Feedback"
-                 :href "./feedback"}]]]]])
+                 :on-click #(accountant/navigate! "/feedback")}]]]]])
