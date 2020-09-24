@@ -121,13 +121,28 @@
        "Register"]]]))
 
 (defn do-login
-  [{contact :contact password :password}]
-  (reset! auth/auth-state {:authenticated? true
-                           :user-id 1
-                           :user-type 2
-                           :dispatch-view :customer})
-  (accountant/navigate! "/customer/dashboard")
-  (js/console.log @auth/auth-state))
+  [{username :username password :password}]
+  (go (let [res (<! (http/post "http://localhost:7000/login" {:with-credentials? false
+                                                              :form-params {:username username
+                                                                            :password password}}))
+            token (get-in res [:body :token])
+            user-id (get-in res [:body :user-id])
+            user-type (-> res
+                          :body
+                          :user-type
+                          keyword)]
+        (if token
+          (do
+            (reset! auth/auth-state {:authenticated? true
+                                     :token token
+                                     :user-id user-id
+                                     :user-type user-type
+                                     :dispatch-view user-type})
+            (accountant/navigate! "/customer/dashboard")
+            (js/alert @auth/auth-state))
+          (do
+            (js/alert ":-( Invalid Username/Password")
+            (accountant/dispatch-current!))))))
 
 (defn login []
   (let [initial-vaules {:username "" :password ""}
@@ -140,15 +155,15 @@
 
      [:> TextField {:variant :outlined
                     :label "Phone Number"
-                    :id :contact
-                    :on-change #(swap! values assoc :contact (.. % -target -value))
+                    :id :username
+                    :on-change #(swap! values assoc :username (.. % -target -value))
                     :helperText "Phone Number should be of 10 digit"}]
      [two-br]
      [:> TextField {:variant :outlined
                     :label "Your Password"
+                    :id :password
                     :on-change #(swap! values assoc :password (.. % -target -value))
                     :type :password
-                    :id :password
                     :helperText ""}]
      [two-br]
      [:> Button {:variant :contained
