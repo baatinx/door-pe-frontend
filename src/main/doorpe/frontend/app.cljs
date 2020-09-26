@@ -1,5 +1,4 @@
 (ns doorpe.frontend.app
-  (:require-macros [secretary.core :refer [defroute]])
   (:require [reagent.dom :as reagent-dom]
             [secretary.core :as secretary]
             [accountant.core :as accountant]
@@ -8,21 +7,20 @@
             [doorpe.frontend.nav.nav :refer [nav]]
             [doorpe.frontend.footer.footer :refer [footer]]
 
-            [doorpe.frontend.handler :refer [home
-                                             register-as-customer
-                                             login
-                                             book-complaint
-                                             about-us
-                                             contact-us
-                                             feedback
+            [doorpe.frontend.home-page.home-page :refer [home-page]]
+            [doorpe.frontend.register.views.customer :as register-customer]
+            [doorpe.frontend.book-complaint.book-complaint :refer [book-complaint]]
+            [doorpe.frontend.feedback.feedback :refer [feedback]]
+            [doorpe.frontend.about-us.about-us :refer [about-us]]
+            [doorpe.frontend.contact-us.contact-us :refer [contact-us]]
+            [doorpe.frontend.auth.login :as login]
 
-                                             ;; customer handlers
-                                             customer-dashboard
-                                             customer-my-bookings
-                                             customer-my-profile
-                                             customer-logout]]))
+            [doorpe.frontend.dashboard.dashboard :refer [dashboard]]
+            [doorpe.frontend.my-profile.my-profile :refer [my-profile]]
+            [doorpe.frontend.my-bookings.my-bookings :refer [my-bookings]]
+            [doorpe.frontend.auth.logout :refer [logout]]))
 
-(defonce page (reagent/atom #'home))
+(defonce page (reagent/atom #'home-page))
 
 (defn current-page
   []
@@ -31,19 +29,16 @@
    [@page]
    [footer]])
 
-;; routes
 (defn app-routes
   []
-
-  ;; public routes
   (secretary/defroute "/" []
-    (reset! page #'home))
+    (reset! page #'home-page))
 
   (secretary/defroute "/register/as-customer" []
-    (reset! page #'register-as-customer))
+    (reset! page #'register-customer/customer))
 
   (secretary/defroute "/login" []
-    (reset! page #'login))
+    (reset! page #'login/login))
 
   (secretary/defroute "/book-complaint" []
     (reset! page #'book-complaint))
@@ -58,20 +53,17 @@
     (reset! page #'feedback))
 
 
+  (secretary/defroute "/dashboard" []
+    (reset! page #'dashboard))
 
-  ;; customer routes
-  (secretary/defroute "/customer/dashboard" []
-    (reset! page #'customer-dashboard))
+  (secretary/defroute "/my-bookings" []
+    (reset! page #'my-bookings))
 
-  (secretary/defroute "/customer/my-bookings" []
-    (reset! page #'customer-my-bookings))
+  (secretary/defroute "/my-profile" []
+    (reset! page #'my-profile))
 
-  (secretary/defroute "/customer/my-profile" []
-    (reset! page #'customer-my-profile))
-
-  (secretary/defroute "/customer/logout" []
-    (reset! page #'customer-logout)))
-
+  (secretary/defroute "/logout" []
+    (reset! page #'logout)))
 
 (defn ^:dev/after-load start
   []

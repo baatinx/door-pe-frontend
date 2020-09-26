@@ -6,9 +6,6 @@
                          :user-id nil
                          :user-type nil
                          :dispatch-view :public}))
-(defn auth
-  []
-  @auth-state)
 
 (defn token
   []

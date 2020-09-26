@@ -11,10 +11,10 @@
     [:> Box {:style {:background-color :royalblue}}
      [:> Container
       [nav-link {:text "Dashboard"
-                 :on-click #(accountant/navigate! "/customer/dashboard")}]
+                 :on-click #(accountant/navigate! "/dashboard")}]
       [nav-link {:text "My Bookings"
-                 :on-click #(accountant/navigate! "/customer/my-bookings")}]
+                 :on-click #(accountant/navigate! "/my-bookings")}]
       [nav-link {:text "My Profile"
-                 :on-click #(accountant/navigate! "/customer/my-profile")}]
+                 :on-click #(accountant/navigate! "/my-profile")}]
       [nav-link {:text "Logout"
-                 :on-click #(accountant/navigate! "/customer/logout")}]]]]])
+                 :on-click #(accountant/navigate! "/logout")}]]]]])
