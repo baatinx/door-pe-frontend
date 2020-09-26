@@ -9,3 +9,12 @@
 (defn auth
   []
   @auth-state)
+
+(defn token
+  []
+  (:token @auth-state))
+
+(defn authorization-value
+  []
+  (str "Token " (:token @auth-state)))
+

@@ -6,8 +6,11 @@
             [cljs.core.async :refer [<!]]
             [doorpe.frontend.components.util :refer [two-br three-br]]
             [doorpe.frontend.auth.auth :as auth]
+            [doorpe.frontend.db :as db]
             ["@material-ui/core" :refer [Container Typography TextField Button MenuItem
                                          Select FormControl  Grid Card CardContent CardAction]]))
+
+(def backend-domain "http://localhost:7000")
 
 (defn home []
   [:div
@@ -24,7 +27,7 @@
 
 (defn dispatch-register-as-customer
   [{:keys [name contact district address password]}]
-  (go (let [url (str "http://localhost:7000/send-otp/" contact)
+  (go (let [url (str  backend-domain "/send-otp/" contact)
             response (<! (http/get url {:with-credentials? false}))
             is-everything-ok? (and (= 200 (:status response))
                                    (:success response)
@@ -37,7 +40,7 @@
         (if (and is-everything-ok?
                  expected-otp
                  (js-promp-and-verify-user-otp? expected-otp))
-          (let [db-response (<!  (http/post "http://localhost:7000/register-as-customer" {:with-credentials? false
+          (let [db-response (<!  (http/post (str backend-domain "/register-as-customer") {:with-credentials? false
                                                                                           :form-params {:name name
                                                                                                         :contact contact
                                                                                                         :district district
@@ -122,27 +125,27 @@
 
 (defn do-login
   [{username :username password :password}]
-  (go (let [res (<! (http/post "http://localhost:7000/login" {:with-credentials? false
-                                                              :form-params {:username username
-                                                                            :password password}}))
-            token (get-in res [:body :token])
-            user-id (get-in res [:body :user-id])
-            user-type (-> res
-                          :body
-                          :user-type
-                          keyword)]
+  (go (let [url (str  backend-domain "/login")
+            res (<! (http/post  url {:with-credentials? false
+                                     :form-params {:username username
+                                                   :password password}}))
+            {:keys [token user-id user-type name address latitude longitude]} (:body res)]
         (if token
           (do
             (reset! auth/auth-state {:authenticated? true
                                      :token token
                                      :user-id user-id
-                                     :user-type user-type
-                                     :dispatch-view user-type})
-            (accountant/navigate! "/customer/dashboard")
-            (js/alert @auth/auth-state))
+                                     :user-type (keyword user-type)
+                                     :dispatch-view (keyword user-type)})
+            (swap! db/app-db update-in [:my-profile] merge {:name name
+                                                            :address address
+                                                            :latitude latitude
+                                                            :longitude longitude})
+            (accountant/navigate! "/customer/dashboard"))
           (do
             (js/alert ":-( Invalid Username/Password")
             (accountant/dispatch-current!))))))
+
 
 (defn login []
   (let [initial-vaules {:username "" :password ""}
@@ -192,23 +195,20 @@
   [:div
    [:h2 "This is Feedback page"]])
 
-
-
-
-
-
-
-
 ;; customer handlers
 (defn customer-dashboard
   []
-  [:div
-   "customer dashboard"])
+  (let [username (-> @db/app-db
+                     :my-profile
+                     :name)]
+    [:div
+     (str "Welcome, " username)]))
 
 (defn customer-my-bookings
   []
-  [:div
-   "customer my bookings"])
+  (let [can-proceed-to-booking? 1]
+    [:div
+     "customer my bookings"]))
 
 (defn customer-my-profile
   []
@@ -217,15 +217,20 @@
 
 (defn do-logout
   []
-  (reset! auth/auth-state {:authenticated? false
-                           :user-id nil
-                           :user-type nil
-                           :dispatch-view :public})
+  (go (let [url (str backend-domain "/logout")
+            res (<! (http/post url  {:with-credentials? false
+                                     :headers {"Authorization" (auth/authorization-value)}}))
+            ok (get-in res [:body :logout])]
+        (reset! auth/auth-state {:authenticated? false
+                                 :user-id nil
+                                 :user-type nil
+                                 :dispatch-view :public})
 
-  (accountant/navigate! "/"))
+        (accountant/navigate! "/"))))
 
 (defn customer-logout
   []
-  (#(js/setTimeout do-logout 1000))
+  (#(do-logout))
+
   [:> Typography {:variant :h1}
    " :-( Bye! Logging out ...."])
