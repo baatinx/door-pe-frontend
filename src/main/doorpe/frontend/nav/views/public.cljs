@@ -11,15 +11,15 @@
      [:> Container
       [nav-link {:text "Home"
                  :on-click #(accountant/navigate! "/")}]
-      [nav-link {:text "Register (user)"
-                 :on-click #(accountant/navigate! "/register/as-customer")}]
-      [nav-link {:text "Login"
-                 :on-click #(accountant/navigate! "/login")}]
+      [nav-link {:text "Register"
+                 :on-click #(accountant/navigate! "/register")}]
       [nav-link {:text "Book Complaint"
                  :on-click #(accountant/navigate! "/book-complaint")}]
+      [nav-link {:text "Feedback"
+                 :on-click #(accountant/navigate! "/feedback")}]
       [nav-link {:text "About Us"
                  :on-click #(accountant/navigate! "/about-us")}]
       [nav-link {:text "Contact Us"
                  :on-click #(accountant/navigate! "/contact-us")}]
-      [nav-link {:text "Feedback"
-                 :on-click #(accountant/navigate! "/feedback")}]]]]])
+      [nav-link {:text "Login"
+                 :on-click #(accountant/navigate! "/login")}]]]]])

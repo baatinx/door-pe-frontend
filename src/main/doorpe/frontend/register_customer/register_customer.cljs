@@ -1,14 +1,14 @@
-(ns doorpe.frontend.register.views.customer
+(ns doorpe.frontend.register-customer.register-customer
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [reagent.core :as r]
             [accountant.core :as accountant]
+            [doorpe.frontend.util :refer [backend-domain]]
             [doorpe.frontend.components.util :refer [two-br]]
             [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
             ["@material-ui/core" :refer [Container Typography TextField Button MenuItem
                                          Select FormControl  Grid Card CardContent CardAction]]))
 
-(def backend-domain "http://localhost:7000")
 
 (defn- js-promp-and-verify-user-otp?
   [expected-otp]
@@ -22,6 +22,7 @@
   [{:keys [name contact district address password]}]
   (go (let [url (str  backend-domain "/send-otp/" contact)
             response (<! (http/get url {:with-credentials? false}))
+            _ (js/alert response)
             is-everything-ok? (and (= 200 (:status response))
                                    (:success response)
                                    (-> response
@@ -33,12 +34,13 @@
         (if (and is-everything-ok?
                  expected-otp
                  (js-promp-and-verify-user-otp? expected-otp))
-          (let [db-response (<!  (http/post (str backend-domain "/register-as-customer") {:with-credentials? false
+          (let [db-response (<!  (http/post (str backend-domain "/register") {:with-credentials? false
                                                                                           :form-params {:name name
                                                                                                         :contact contact
                                                                                                         :district district
                                                                                                         :address address
-                                                                                                        :password password}}))
+                                                                                                        :password password
+                                                                                                        :user-type "customer"}}))
                 inserted? (get-in db-response [:body :insert-status])]
             (if inserted?
               (do
@@ -49,7 +51,7 @@
                 (accountant/navigate! "/"))))
           (accountant/navigate! "/")))))
 
-(defn customer []
+(defn register-customer []
   (let [initial-vaules {:name "" :contact "" :district "" :address "" :password "" :password-match ""}
         values (r/atom initial-vaules)]
     [:> Container {:maxWidht "xs"

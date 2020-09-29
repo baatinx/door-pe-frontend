@@ -1,8 +1,5 @@
-(ns doorpe.frontend.db)
+(ns doorpe.frontend.db
+  (:require [reagent.core :as reagent]))
 
-(def app-db (atom {:my-profile {:name ""
-                                :address ""
-                                :pin-code ""
-                                :latitude ""
-                                :longitude ""}
-                   :booking {:category "one"}}))
+(def app-db (reagent/atom {:my-profile nil
+                           :my-bookings nil}))

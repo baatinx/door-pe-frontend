@@ -7,11 +7,11 @@
                          :user-type nil
                          :dispatch-view :public}))
 
-(defn token
+(defn get-token
   []
   (:token @auth-state))
 
-(defn authorization-value
+(defn set-authorization
   []
-  (str "Token " (:token @auth-state)))
+  (str "Token " (get-token)))
 

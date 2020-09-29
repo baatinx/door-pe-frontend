@@ -8,7 +8,9 @@
             [doorpe.frontend.footer.footer :refer [footer]]
 
             [doorpe.frontend.home-page.home-page :refer [home-page]]
-            [doorpe.frontend.register.views.customer :as register-customer]
+            [doorpe.frontend.register.register :refer [register]]
+            [doorpe.frontend.register-customer.register-customer :refer [register-customer]]
+            [doorpe.frontend.register-service-provider.register-service-provider :refer [register-service-provider]]
             [doorpe.frontend.book-complaint.book-complaint :refer [book-complaint]]
             [doorpe.frontend.feedback.feedback :refer [feedback]]
             [doorpe.frontend.about-us.about-us :refer [about-us]]
@@ -34,8 +36,14 @@
   (secretary/defroute "/" []
     (reset! page #'home-page))
 
-  (secretary/defroute "/register/as-customer" []
-    (reset! page #'register-customer/customer))
+  (secretary/defroute "/register" []
+    (reset! page #'register))
+
+  (secretary/defroute "/register/customer" []
+    (reset! page #'register-customer))
+
+  (secretary/defroute "/register/service-provider" []
+    (reset! page #'register-service-provider))
 
   (secretary/defroute "/login" []
     (reset! page #'login/login))
