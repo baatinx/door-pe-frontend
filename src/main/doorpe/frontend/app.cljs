@@ -20,6 +20,7 @@
             [doorpe.frontend.dashboard.dashboard :refer [dashboard]]
             [doorpe.frontend.my-profile.my-profile :refer [my-profile]]
             [doorpe.frontend.my-bookings.my-bookings :refer [my-bookings]]
+            [doorpe.frontend.book-a-service.book-a-service :refer [book-a-service]]
             [doorpe.frontend.auth.logout :refer [logout]]))
 
 (defonce page (reagent/atom #'home-page))
@@ -66,6 +67,9 @@
 
   (secretary/defroute "/my-bookings" []
     (reset! page #'my-bookings))
+
+  (secretary/defroute "/book-a-service" []
+    (reset! page #'book-a-service))
 
   (secretary/defroute "/my-profile" []
     (reset! page #'my-profile))
