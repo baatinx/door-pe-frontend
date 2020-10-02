@@ -1,15 +1,31 @@
 (ns doorpe.frontend.my-bookings.views.customer
   (:require-macros [cljs.core.async.macros :refer [go]])
-  (:require [cljs-http.client :as http]
+  (:require [reagent.core :as reagent]
+            [cljs-http.client :as http]
             [accountant.core :as accountant]
             [cljs.core.async :refer [<!]]
             [doorpe.frontend.auth.auth :as auth]
             [doorpe.frontend.db :as db]
+            [doorpe.frontend.util :refer [backend-domain]]
             ["@material-ui/core" :refer [Grid Container Typography Card CardContent TextField Button MenuItem
                                          Select FormControl  Grid Card CardContent CardAction]]))
 
+(def my-bookings (reagent/atom {:my-bookings nil}))
+(defn cancel-booking
+  [booking-id]
+  (go (let [url (str backend-domain "/cancel-booking/" booking-id)
+            res (<! (http/post url {:with-credentials? false
+                                    :headers {"Authorization" (auth/set-authorization)}}))
+            status (-> res
+                       :body
+                       :status)]
+        (if status
+          (do
+            (accountant/navigate! "/my-bookings"))
+          (accountant/navigate! "/dashboard")))))
+
 (defn render-my-bookings
-  [{:keys [service-provider-name service-provider-contact service-provider-address service-name service-charge-type booking-on service-on service-time status]}]
+  [{:keys [booking-id service-provider-name service-provider-contact service-provider-address service-name service-charge-type booking-on service-on service-time status]}]
   [:> Card {:variant :outlined
             :style {:max-width :400px
                     :margin "30px"}}
@@ -54,7 +70,12 @@
     [:br]
 
     [:> Typography {:variant "button"}
-     (str "Status : " status)]]])
+     (str "Status : " status)]
+    (if (or (= status "pending"))
+      [:> Button {:variant :contained
+                  :color :secondary
+                  :on-click #(cancel-booking booking-id)}
+       "Cancel Booking"])]])
 
 (defn fetch-bookings
   []
@@ -80,6 +101,7 @@
         [:> Button {:variant "contained"
                     :color :primary
                     :style {:margin " 100px 50px"}
-                    :on-click #(accountant/navigate! "/book-a-service")}
+                    :on-click #(do (swap! db/app-db assoc :book-a-service nil)
+                                   (accountant/navigate! "/book-a-service"))}
          "Book a new service"]]]
       [:div "no bookings"])))
