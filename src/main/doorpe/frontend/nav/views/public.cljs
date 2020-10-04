@@ -21,5 +21,7 @@
                  :on-click #(accountant/navigate! "/about-us")}]
       [nav-link {:text "Contact Us"
                  :on-click #(accountant/navigate! "/contact-us")}]
+       [nav-link {:text "Track location"
+                  :on-click #(accountant/navigate! "/track-location")}]
       [nav-link {:text "Login"
                  :on-click #(accountant/navigate! "/login")}]]]]])

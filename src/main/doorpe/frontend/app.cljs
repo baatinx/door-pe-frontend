@@ -12,6 +12,7 @@
             [doorpe.frontend.register-customer.register-customer :refer [register-customer]]
             [doorpe.frontend.register-service-provider.register-service-provider :refer [register-service-provider]]
             [doorpe.frontend.book-complaint.book-complaint :refer [book-complaint]]
+            [doorpe.frontend.track-location.track-location :refer [track-location]]
             [doorpe.frontend.feedback.feedback :refer [feedback]]
             [doorpe.frontend.about-us.about-us :refer [about-us]]
             [doorpe.frontend.contact-us.contact-us :refer [contact-us]]
@@ -61,7 +62,6 @@
   (secretary/defroute "/feedback" []
     (reset! page #'feedback))
 
-
   (secretary/defroute "/dashboard" []
     (reset! page #'dashboard))
 
@@ -73,6 +73,9 @@
 
   (secretary/defroute "/my-profile" []
     (reset! page #'my-profile))
+
+  (secretary/defroute "/track-location" []
+    (reset! page #'track-location))
 
   (secretary/defroute "/logout" []
     (reset! page #'logout)))

@@ -71,6 +71,9 @@
 
     [:> Typography {:variant "button"}
      (str "Status : " status)]
+    [:br]
+    [:br]
+
     (if (or (= status "pending"))
       [:> Button {:variant :contained
                   :color :secondary

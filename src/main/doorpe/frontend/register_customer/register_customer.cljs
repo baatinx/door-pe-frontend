@@ -9,6 +9,14 @@
             ["@material-ui/core" :refer [Container Typography TextField Button MenuItem
                                          Select FormControl  Grid Card CardContent CardAction]]))
 
+(def coords (atom ""))
+
+(defn position
+  [p]
+  (let [latitude (str p.coords.latitude)
+        longitude (str p.coords.longitude)]
+    (reset! coords  {:latitude latitude
+                    :longitude longitude})))
 
 (defn- js-promp-and-verify-user-otp?
   [expected-otp]
@@ -20,9 +28,9 @@
 
 (defn dispatch-register-as-customer
   [{:keys [name contact district address password]}]
-  (go (let [url (str  backend-domain "/send-otp/" contact)
+  (go (let [_ (js/navigator.geolocation.getCurrentPosition position)
+            url (str  backend-domain "/send-otp/" contact)
             response (<! (http/get url {:with-credentials? false}))
-            _ (js/alert response)
             is-everything-ok? (and (= 200 (:status response))
                                    (:success response)
                                    (-> response
@@ -34,13 +42,17 @@
         (if (and is-everything-ok?
                  expected-otp
                  (js-promp-and-verify-user-otp? expected-otp))
-          (let [db-response (<!  (http/post (str backend-domain "/register") {:with-credentials? false
-                                                                                          :form-params {:name name
-                                                                                                        :contact contact
-                                                                                                        :district district
-                                                                                                        :address address
-                                                                                                        :password password
-                                                                                                        :user-type "customer"}}))
+          (let [latitude (:latitude @coords)
+                longitude (:longitude @coords)
+                db-response (<!  (http/post (str backend-domain "/register") {:with-credentials? false
+                                                                              :form-params {:name name
+                                                                                            :contact contact
+                                                                                            :district district
+                                                                                            :address address
+                                                                                            :password password
+                                                                                            :user-type "customer"
+                                                                                            :latitude latitude
+                                                                                            :longitude longitude}}))
                 inserted? (get-in db-response [:body :insert-status])]
             (if inserted?
               (do
