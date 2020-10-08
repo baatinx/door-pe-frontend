@@ -1,8 +1,7 @@
 (ns doorpe.frontend.nav.views.service-provider
-  (:require ["@material-ui/core" :refer [CssBaseline Box Typography Paper Tabs Container Button AppBar Link Menu MenuItem]]
+  (:require ["@material-ui/core" :refer [CssBaseline Box Container]]
             [doorpe.frontend.nav.nav-links :refer [nav-link]]
-            [accountant.core :as accountant]
-            [doorpe.frontend.auth.auth :as auth]))
+            [accountant.core :as accountant]))
 
 (defn service-provider
   []

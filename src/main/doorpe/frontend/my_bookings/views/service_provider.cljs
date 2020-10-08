@@ -1,7 +1,6 @@
 (ns doorpe.frontend.my-bookings.views.service-provider
   (:require-macros [cljs.core.async.macros :refer [go]])
-  (:require [reagent.core :as reagent]
-            [cljs-http.client :as http]
+  (:require [cljs-http.client :as http]
             [accountant.core :as accountant]
             [cljs.core.async :refer [<!]]
             [doorpe.frontend.auth.auth :as auth]
@@ -10,7 +9,6 @@
             ["@material-ui/core" :refer [Grid Container Typography Card CardContent TextField Button MenuItem
                                          Select FormControl  Grid Card CardContent CardAction]]))
 
-(def my-bookings (reagent/atom {:my-bookings nil}))
 (def location-coords (atom {}))
 
 (defn success
@@ -95,13 +93,14 @@
                    "/")]
       [:> Button {:variant :contained
                   :color :secondary
-                  :href url}
+                  :href url
+                  :target "_blank"}
        "Location coords"])
 
     [:br]
     [:br]
 
-    (if (or (= status "pending"))
+    (if (= status "pending")
       [:> Button {:variant :contained
                   :color :secondary
                   :on-click #(accept-booking booking-id)}
@@ -119,9 +118,10 @@
 (defn service-provider
   []
   (let [_ (fetch-bookings)
-        _ (set-location-coords)
-        my-bookings (:my-bookings @db/app-db)]
-    (if my-bookings
-      [:div {:style {:display :flex}}
-       `[:<> ~@(map render-my-bookings my-bookings)]]
-      [:div "no bookings"])))
+        _ (set-location-coords)]
+    (fn []
+      (let [my-bookings (:my-bookings @db/app-db)]
+        [:div {:style {:display :flex}}
+         (if my-bookings
+           `[:<> ~@(map render-my-bookings my-bookings)]
+           [:div "no bookings"])]))))

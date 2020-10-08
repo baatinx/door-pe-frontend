@@ -10,7 +10,6 @@
             ["@material-ui/core" :refer [Grid Container Typography Card CardContent TextField Button MenuItem
                                          Select FormControl  Grid Card CardContent CardAction]]))
 
-(def my-bookings (reagent/atom {:my-bookings nil}))
 (defn cancel-booking
   [booking-id]
   (go (let [url (str backend-domain "/cancel-booking/" booking-id)
@@ -82,21 +81,20 @@
 
 (defn fetch-bookings
   []
-  (go (let [_ (reset! my-bookings {})
-            res (<! (http/get "http://localhost:7000/my-bookings" {:with-credentials? false
+  (go (let [res (<! (http/get "http://localhost:7000/my-bookings" {:with-credentials? false
                                                                    :headers {"Authorization" (auth/set-authorization)}}))
             bookings (:body res)
             c (count bookings)]
-        (and (> c 0)
-             (swap! db/app-db assoc  :my-bookings bookings)))))
+        (if (> c 0)
+          (swap! db/app-db assoc  :my-bookings bookings)
+          (swap! db/app-db assoc :my-bookings nil)))))
 
 (defn customer
   []
-  (let [_ (fetch-bookings)
-        my-bookings (:my-bookings @db/app-db)]
-    (if my-bookings
+  (let [_ (fetch-bookings)]
+    (fn []
       [:div {:style {:display :flex}}
-       `[:<> ~@(map render-my-bookings my-bookings)]
+       `[:<> ~@(map render-my-bookings (:my-bookings @db/app-db))]
 
        [:> Card {:variant :outlined
                  :style {:max-width :400px
@@ -107,5 +105,4 @@
                     :style {:margin " 100px 50px"}
                     :on-click #(do (swap! db/app-db assoc :book-a-service nil)
                                    (accountant/navigate! "/book-a-service"))}
-         "Book a new service"]]]
-      [:div "no bookings"])))
+         "Book a new service"]]])))

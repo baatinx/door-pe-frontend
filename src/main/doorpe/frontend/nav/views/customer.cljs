@@ -1,5 +1,5 @@
 (ns doorpe.frontend.nav.views.customer
-  (:require ["@material-ui/core" :refer [CssBaseline Box Typography Paper Tabs Container Button AppBar Link Menu MenuItem]]
+  (:require ["@material-ui/core" :refer [CssBaseline Box Container]]
             [doorpe.frontend.nav.nav-links :refer [nav-link]]
             [accountant.core :as accountant]
             [doorpe.frontend.db :as db]))
@@ -20,6 +20,4 @@
       [nav-link {:text "My Profile"
                  :on-click #(accountant/navigate! "/my-profile")}]
       [nav-link {:text "Logout"
-                 :on-click #(accountant/navigate! "/logout")}]
-      [nav-link {:text "check states"
-                 :on-click #(js/alert @db/app-db)}]]]]])
+                 :on-click #(accountant/navigate! "/logout")}]]]]])

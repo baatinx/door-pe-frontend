@@ -40,7 +40,8 @@
 
 (defn choose-category
   []
-  (let [_ (fetch-categories)
-        categories (:categories @categories)]
-    [:div {:style {:display :flex}}
-     `[:<> ~@(map render-categories categories)]]))
+  (let [_ (fetch-categories)]
+    (fn []
+      (let [categories (:categories @categories)]
+        [:div {:style {:display :flex}}
+         `[:<> ~@(map render-categories categories)]]))))

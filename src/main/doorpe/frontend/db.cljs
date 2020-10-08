@@ -1,6 +1,6 @@
 (ns doorpe.frontend.db
   (:require [reagent.core :as reagent]))
 
-(defonce app-db (reagent/atom {:my-profile nil
-                               :my-bookings nil
-                               :book-a-service nil}))
+(def app-db (reagent/atom {:my-profile nil
+                           :my-bookings nil
+                           :book-a-service nil}))

@@ -74,13 +74,13 @@
 
 (defn choose-service-provider
   []
-  (let [_ (fetch-service-providers)
-        service-providers (:service-providers @service-providers)]
-    [:<>
-     [:> Button {:variant :contained
-                 :color :secondary
-                 :on-click #(swap! db/app-db update-in [:book-a-service] dissoc :service-id)}
-      "Go Back"]
-     [:div {:style {:display :flex}}
-      `[:<> ~@(map render-service-providers service-providers)]]]))
-
+  (let [_ (fetch-service-providers)]
+    (fn []
+      (let [service-providers (:service-providers @service-providers)]
+        [:<>
+         [:> Button {:variant :contained
+                     :color :secondary
+                     :on-click #(swap! db/app-db update-in [:book-a-service] dissoc :service-id)}
+          "Go Back"]
+         [:div {:style {:display :flex}}
+          `[:<> ~@(map render-service-providers service-providers)]]]))))

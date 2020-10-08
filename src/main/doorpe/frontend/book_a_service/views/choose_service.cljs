@@ -41,12 +41,13 @@
 
 (defn choose-service
   []
-  (let [_ (fetch-services)
-        services (:services @services)]
-    [:<>
-     [:> Button {:variant :contained
-                 :color :secondary
-                 :on-click #(swap! db/app-db update-in [:book-a-service] dissoc :category-id)}
-      "Go Back"]
-     [:div {:style {:display :flex}}
-      `[:<> ~@(map render-services services)]]]))
+  (let [_ (fetch-services)]
+    (fn []
+      (let [services (:services @services)]
+        [:<>
+         [:> Button {:variant :contained
+                     :color :secondary
+                     :on-click #(swap! db/app-db update-in [:book-a-service] dissoc :category-id)}
+          "Go Back"]
+         [:div {:style {:display :flex}}
+          `[:<> ~@(map render-services services)]]]))))

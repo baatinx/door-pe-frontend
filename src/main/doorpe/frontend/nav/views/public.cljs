@@ -1,5 +1,5 @@
 (ns doorpe.frontend.nav.views.public
-  (:require ["@material-ui/core" :refer [CssBaseline Box Typography Paper Tabs Container Button AppBar Link Menu MenuItem]]
+  (:require ["@material-ui/core" :refer [CssBaseline Box Container]]
             [accountant.core :as accountant]
             [doorpe.frontend.nav.nav-links :refer [nav-link]]))
 
