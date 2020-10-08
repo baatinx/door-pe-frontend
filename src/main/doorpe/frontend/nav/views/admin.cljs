@@ -26,7 +26,7 @@
                               (accountant/navigate! "/admin-edit"))}]
       [nav-link {:text "Edit Service"
                  :on-click #(do
-                              (swap! db/app-db assoc :admin-edit "Service")
+                              (swap! db/app-db assoc :admin-edit "service")
                               (accountant/navigate! "/admin-edit"))}]
       [nav-link {:text "Logout"
                  :on-click #(accountant/navigate! "/logout")}]]]]])

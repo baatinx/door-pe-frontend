@@ -21,7 +21,10 @@
             [doorpe.frontend.my-profile.my-profile :refer [my-profile]]
             [doorpe.frontend.my-bookings.my-bookings :refer [my-bookings]]
             [doorpe.frontend.book-a-service.book-a-service :refer [book-a-service]]
-            [doorpe.frontend.auth.logout :refer [logout]]))
+            [doorpe.frontend.auth.logout :refer [logout]]
+
+            [doorpe.frontend.admin-add.admin-add :refer [admin-add]]
+            [doorpe.frontend.admin-edit.admin-edit :refer [admin-edit]]))
 
 (defonce page (reagent/atom #'home-page))
 
@@ -74,7 +77,13 @@
     (reset! page #'my-profile))
 
   (secretary/defroute "/logout" []
-    (reset! page #'logout)))
+    (reset! page #'logout))
+
+  (secretary/defroute "/admin-add" []
+    (reset! page #'admin-add))
+
+  (secretary/defroute "/admin-edit" []
+    (reset! page #'admin-edit)))
 
 (defn ^:dev/after-load start
   []
