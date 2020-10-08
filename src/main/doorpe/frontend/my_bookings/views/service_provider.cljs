@@ -57,11 +57,6 @@
     [:br]
 
     [:> Typography {:variant "button"}
-     (str "Contact : " customer-contact)]
-
-    [:br]
-
-    [:> Typography {:variant "button"}
      (str "Address : " customer-address)]
 
     [:br]

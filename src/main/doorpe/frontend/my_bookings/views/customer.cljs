@@ -39,17 +39,7 @@
     [:br]
 
     [:> Typography {:variant "button"}
-     (str "Contact : " service-provider-contact)]
-
-    [:br]
-
-    [:> Typography {:variant "button"}
      (str "Address : " service-provider-address)]
-
-    [:br]
-
-    [:> Typography {:variant "button"}
-     (str "Charge Type : " service-charge-type)]
 
     [:br]
 

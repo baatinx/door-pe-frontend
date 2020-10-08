@@ -12,7 +12,7 @@
 (def service-providers (reagent/atom {:service-providers nil}))
 
 (defn render-service-providers
-  [{:keys [_id name contact district address service-charges service-intro charges experience professional-degree-holder]}]
+  [{:keys [_id name district address service-charges service-intro charges experience professional-degree-holder]}]
   [:> Card {:variant :outlined
             :style {:max-width :400px
                     :margin "30px"}}
@@ -26,13 +26,7 @@
 
     [:br]
     [:> Typography {:variant "button"}
-     (str "Contact : " contact)]
-
-
-    [:br]
-    [:> Typography {:variant "button"}
      (str "Service Charges : " service-charges)]
-
 
     [:br]
     [:> Typography {:variant "button"}

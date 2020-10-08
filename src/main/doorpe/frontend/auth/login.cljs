@@ -16,7 +16,7 @@
             res (<! (http/post  url {:with-credentials? false
                                      :form-params {:username username
                                                    :password password}}))
-            {:keys [token user-id user-type name address latitude longitude]} (:body res)]
+            {:keys [token user-id user-type name]} (:body res)]
         (if token
           (do
             (reset! auth/auth-state {:authenticated? true
@@ -24,10 +24,7 @@
                                      :user-id user-id
                                      :user-type (keyword user-type)
                                      :dispatch-view (keyword user-type)})
-            (swap! db/app-db update-in [:my-profile] merge {:name name
-                                                            :address address
-                                                            :latitude latitude
-                                                            :longitude longitude})
+            (swap! db/app-db update-in [:my-profile] merge {:name name})
             (accountant/navigate! "/dashboard"))
           (do
             (js/alert ":-( Invalid Username/Password")
@@ -60,4 +57,3 @@
                  :color :primary
                  :on-click #(do-login @values)}
       "Login"]]))
-

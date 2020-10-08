@@ -17,8 +17,7 @@
         latitude coords.latitude
         longitude coords.longitude]
     (reset! location-coords {:latitude (str latitude)
-                             :longitude (str longitude)})
-    (js/alert @location-coords)))
+                             :longitude (str longitude)})))
 
 (defn error
   [err]

@@ -15,8 +15,9 @@
       [nav-link {:text "My Bookings"
                  :on-click #(accountant/navigate! "/my-bookings")}]
       [nav-link {:text "Book a Service"
-                 :on-click #(do ((swap! db/app-db assoc :book-a-service nil)
-                                 (accountant/navigate! "/book-a-service")))}]
+                 :on-click #(do
+                              (swap! db/app-db assoc :book-a-service nil)
+                              (accountant/navigate! "/book-a-service"))}]
       [nav-link {:text "My Profile"
                  :on-click #(accountant/navigate! "/my-profile")}]
       [nav-link {:text "Logout"
