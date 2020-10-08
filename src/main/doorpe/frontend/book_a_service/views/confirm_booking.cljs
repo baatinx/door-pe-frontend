@@ -10,6 +10,25 @@
             ["@material-ui/core" :refer [Grid Container Typography Card CardContent TextField Button MenuItem
                                          Select FormControl  Grid Card CardContent CardAction]]))
 
+(def location-coords (atom {}))
+
+(defn success
+  [position]
+  (let [coords position.coords
+        latitude coords.latitude
+        longitude coords.longitude]
+    (reset! location-coords {:latitude (str latitude)
+                             :longitude (str longitude)})))
+
+(defn error
+  [err]
+  (js/console.log (str "ERROR: " err.code " Message: " err.message)))
+
+(defn set-location-coords
+  []
+  (let [options {:enableHighAccuracy true}]
+    (js/navigator.geolocation.getCurrentPosition success error)))
+
 (defn make-booking
   [date time]
   (go (let [url (str backend-domain "/book-a-service")
@@ -18,6 +37,8 @@
             service-provider-id (get-in @db/app-db [:book-a-service :service-provider-id])
             service-charges (get-in @db/app-db [:book-a-service :service-charges])
             charges (get-in @db/app-db [:book-a-service :charges])
+            latitude (:latitude @location-coords)
+            longitude  (:longitude @location-coords)
             res (<! (http/post url {:with-credentials? false
                                     :headers {"Authorization" (auth/set-authorization)}
                                     :form-params {:customer-id customer-id
@@ -26,7 +47,9 @@
                                                   :service-on date
                                                   :service-time time
                                                   :service-charges service-charges
-                                                  :charges charges}}))
+                                                  :charges charges
+                                                  :latitude latitude
+                                                  :longitude longitude}}))
             insert-status (-> res
                               :body
                               :insert-status)]
@@ -39,7 +62,8 @@
 
 (defn confirm-booking
   []
-  (let [initial-values (reagent/atom {:date "" :time ""})]
+  (let [_ (set-location-coords)
+        initial-values (reagent/atom {:date "" :time ""})]
     [:<>
      [:> Button {:variant :contained
                  :color :secondary

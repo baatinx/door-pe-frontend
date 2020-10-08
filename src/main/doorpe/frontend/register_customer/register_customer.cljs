@@ -9,14 +9,25 @@
             ["@material-ui/core" :refer [Container Typography TextField Button MenuItem
                                          Select FormControl  Grid Card CardContent CardAction]]))
 
-(def coords (atom ""))
+(def location-coords (atom {}))
 
-(defn position
-  [p]
-  (let [latitude (str p.coords.latitude)
-        longitude (str p.coords.longitude)]
-    (reset! coords  {:latitude latitude
-                    :longitude longitude})))
+(defn success
+  [position]
+  (let [coords position.coords
+        latitude coords.latitude
+        longitude coords.longitude]
+    (reset! location-coords {:latitude (str latitude)
+                             :longitude (str longitude)})
+    (js/alert @location-coords)))
+
+(defn error
+  [err]
+  (js/console.log (str "ERROR: " err.code " Message: " err.message)))
+
+(defn set-location-coords
+  []
+  (let [options {:enableHighAccuracy true}]
+    (js/navigator.geolocation.getCurrentPosition success error)))
 
 (defn- js-promp-and-verify-user-otp?
   [expected-otp]
@@ -28,7 +39,7 @@
 
 (defn dispatch-register-as-customer
   [{:keys [name contact district address password]}]
-  (go (let [_ (js/navigator.geolocation.getCurrentPosition position)
+  (go (let [_  (set-location-coords)
             url (str  backend-domain "/send-otp/" contact)
             response (<! (http/get url {:with-credentials? false}))
             is-everything-ok? (and (= 200 (:status response))
@@ -42,8 +53,8 @@
         (if (and is-everything-ok?
                  expected-otp
                  (js-promp-and-verify-user-otp? expected-otp))
-          (let [latitude (:latitude @coords)
-                longitude (:longitude @coords)
+          (let [latitude (:latitude @location-coords)
+                longitude (:longitude @location-coords)
                 db-response (<!  (http/post (str backend-domain "/register") {:with-credentials? false
                                                                               :form-params {:name name
                                                                                             :contact contact

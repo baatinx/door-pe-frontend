@@ -11,6 +11,24 @@
                                          Select FormControl  Grid Card CardContent CardAction]]))
 
 (def my-bookings (reagent/atom {:my-bookings nil}))
+(def location-coords (atom {}))
+
+(defn success
+  [position]
+  (let [coords position.coords
+        latitude coords.latitude
+        longitude coords.longitude]
+    (reset! location-coords {:latitude (str latitude)
+                             :longitude (str longitude)})))
+
+(defn error
+  [err]
+  (js/console.log (str "ERROR: " err.code " Message: " err.message)))
+
+(defn set-location-coords
+  []
+  (let [options {:enableHighAccuracy true}]
+    (js/navigator.geolocation.getCurrentPosition success error)))
 
 (defn accept-booking
   [booking-id]
@@ -26,7 +44,7 @@
           (accountant/navigate! "/dashboard")))))
 
 (defn render-my-bookings
-  [{:keys [booking-id customer-name customer-contact customer-address service-name service-charge-type booking-on service-on service-time status]}]
+  [{:keys [booking-id customer-name customer-contact customer-address service-name booking-on service-on service-time latitude longitude status]}]
   [:> Card {:variant :outlined
             :style {:max-width :400px
                     :margin "30px"}}
@@ -70,6 +88,19 @@
     [:br]
     [:br]
 
+    (let [url (str "https://www.google.com/maps/dir/"
+                   (:latitude @location-coords) "," (:longitude @location-coords)
+                   "/"
+                   latitude "," longitude
+                   "/")]
+      [:> Button {:variant :contained
+                  :color :secondary
+                  :href url}
+       "Location coords"])
+
+    [:br]
+    [:br]
+
     (if (or (= status "pending"))
       [:> Button {:variant :contained
                   :color :secondary
@@ -88,6 +119,7 @@
 (defn service-provider
   []
   (let [_ (fetch-bookings)
+        _ (set-location-coords)
         my-bookings (:my-bookings @db/app-db)]
     (if my-bookings
       [:div {:style {:display :flex}}

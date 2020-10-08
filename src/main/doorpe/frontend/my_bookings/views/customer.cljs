@@ -82,7 +82,8 @@
 
 (defn fetch-bookings
   []
-  (go (let [res (<! (http/get "http://localhost:7000/my-bookings" {:with-credentials? false
+  (go (let [_ (reset! my-bookings {})
+            res (<! (http/get "http://localhost:7000/my-bookings" {:with-credentials? false
                                                                    :headers {"Authorization" (auth/set-authorization)}}))
             bookings (:body res)
             c (count bookings)]
