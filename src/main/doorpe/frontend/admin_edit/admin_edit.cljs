@@ -5,7 +5,7 @@
 
 (defn admin-edit
   []
-  (let [admin-edit (:admin-edit @db/app-db)]
+  (let [edit-what (:admin-edit @db/app-db)]
     (cond
-      (= "category" admin-edit) [category]
-      (= "service" admin-edit) [service])))
+      (= "category" edit-what) [category]
+      (= "service" edit-what) [service])))
