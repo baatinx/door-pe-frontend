@@ -34,26 +34,29 @@
 (defn login []
   (let [initial-vaules {:username "" :password ""}
         values (r/atom initial-vaules)]
-    [:> Container
-     [:> Typography {:variant :h6}
-      "Login"]
+    [:> Container {:maxWidth "sm"}
+     [:> Card
+      [:> CardContent
+       [:> Typography {:variant :h6}
+        "Login"]
 
-     [:br]
+       [:br]
+       [:> TextField {:variant :outlined
+                      :label "Phone Number"
+                      :id :username
+                      :on-change #(swap! values assoc :username (.. % -target -value))
+                      :helperText "Phone Number should be of 10 digit"}]
+       [two-br]
+       [:> TextField {:variant :outlined
+                      :label "Your Password"
+                      :id :password
+                      :on-change #(swap! values assoc :password (.. % -target -value))
+                      :type :password
+                      :helperText ""}]
 
-     [:> TextField {:variant :outlined
-                    :label "Phone Number"
-                    :id :username
-                    :on-change #(swap! values assoc :username (.. % -target -value))
-                    :helperText "Phone Number should be of 10 digit"}]
-     [two-br]
-     [:> TextField {:variant :outlined
-                    :label "Your Password"
-                    :id :password
-                    :on-change #(swap! values assoc :password (.. % -target -value))
-                    :type :password
-                    :helperText ""}]
-     [two-br]
-     [:> Button {:variant :contained
-                 :color :primary
-                 :on-click #(do-login @values)}
-      "Login"]]))
+       [two-br]
+
+       [:> Button {:variant :contained
+                   :color :primary
+                   :on-click #(do-login @values)}
+        "Login"]]]]))

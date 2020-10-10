@@ -5,26 +5,25 @@
 
 (defn register
   []
-  [:<>
-   [:> Container {:style {:text-align :center
-                          :width :600px}}
+  [:> Container
+   [:> Grid {:container true
+             :spacing 5
+             :justify :space-around
+             :alignItems :center}
+    [:> Grid {:item true
+              :xs 6}
+     [:> Card
+      [:> CardContent
+       [:> Button {:variant "contained"
+                   :color :primary
+                   :on-click #(accountant/navigate! "/register/customer")}
+        "Register as Customer"]]]]
 
-    [:> Card {:variant :outlined
-              :style {:max-width :400px
-                      :margin "30px"
-                      :text-align :center}}
-     [:> Button {:variant "contained"
-                 :color :primary
-                 :style {:margin " 100px 50px"}
-                 :on-click #(accountant/navigate! "/register/customer")}
-      "Register as Customer"]]
-
-    [:> Card {:variant :outlined
-              :style {:max-width :400px
-                      :margin "30px"
-                      :text-align :center}}
-     [:> Button {:variant "contained"
-                 :color :secondary
-                 :style {:margin " 100px 50px"}
-                 :on-click #(accountant/navigate! "/register/service-provider")}
-      "Register as service Provider"]]]])
+    [:> Grid {:item true
+              :xs 6}
+     [:> Card
+      [:> CardContent
+       [:> Button {:variant "contained"
+                   :color :secondary
+                   :on-click #(accountant/navigate! "/register/service-provider")}
+        "Register as service Provider"]]]]]])

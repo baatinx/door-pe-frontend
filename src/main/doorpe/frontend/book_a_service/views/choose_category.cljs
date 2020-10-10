@@ -12,17 +12,17 @@
 (def categories (reagent/atom {:categories nil}))
 
 (defn render-categories
-  [{:keys [_id category-name desc]}]
+ [{:keys [_id name description]}]
   [:> Card {:variant :outlined
             :style {:max-width :400px
                     :margin "30px"}}
    [:> CardContent
-    [:> Typography {:variant "h6"}
-     category-name]
+    [:> Typography {:variant "h5"}
+     name]
 
     [:br]
-    [:> Typography {:variant "button"}
-     (str "Description : " desc)]
+    [:> Typography {:variant "body1"}
+     description]
 
     [:br]
 

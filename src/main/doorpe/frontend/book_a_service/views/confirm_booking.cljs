@@ -64,48 +64,59 @@
   []
   (let [_ (set-location-coords)
         initial-values (reagent/atom {:date "" :time ""})]
-    [:<>
+    [:> Container {:maxWidth "sm"}
      [:> Button {:variant :contained
                  :color :secondary
                  :on-click #(swap! db/app-db update-in [:book-a-service] dissoc :service-provider-id)}
       "back"]
 
      [:br]
-     [:br]
-     [:br]
-     [:br]
-     [:> Card {:style {:width :500px
-                       :margin :auto
-                       :text-align :center}}
-      [:br]
-      [:> Typography {:variant "button"}
-       "Choose Booking Date"]
 
-      [:> TextField
-       {:variant :outlined
-        :type :date
-        :on-change #(swap! initial-values assoc :date (.. % -target -value))}]
+     [:> Card
+      [:> CardContent
 
-      [:br]
-      [:br]
-      [:> Typography {:variant "button"}
-       "Choose Booking Timming"]
+       [:> Grid {:container true}
+        [:> Grid {:item true
+                  :xs 6}
+         [:> Typography {:variant "button"}
+          "Choose Booking Date"]]
 
-      [:> TextField
-       {:variant :outlined
-        :type :time
-        :on-change #(swap! initial-values assoc :time (.. % -target -value))}]
+        [:> Grid {:item true
+                  :xs 6}
+         [:> TextField
+          {:variant :outlined
+           :type :date
+           :on-change #(swap! initial-values assoc :date (.. % -target -value))}]]]
 
-      [:br]
-      [:br]
+       [:br]
 
-      [:> Button {:variant :contained
-                  :color :primary
-                  :on-click #(make-booking
-                              (-> @initial-values
-                                  :date
-                                  str)
-                              (-> @initial-values
-                                  :time
-                                  str))}
-       "Confirm Booking"]]]))
+       [:> Grid {:container true}
+        [:> Grid {:item true
+                  :xs 6}
+         [:> Typography {:variant "button"}
+          "Choose Booking Timming"]]
+
+        [:> Grid {:item true
+                  :xs 6}
+         [:> TextField
+          {:variant :outlined
+           :type :time
+           :on-change #(swap! initial-values assoc :time (.. % -target -value))}]]]
+
+       [:br]
+
+       [:> Grid {:container true
+                 :justify :center
+                 :align :center}
+        [:> Grid {:item true
+                  :xs 6}
+         [:> Button {:variant :contained
+                     :color :primary
+                     :on-click #(make-booking
+                                 (-> @initial-values
+                                     :date
+                                     str)
+                                 (-> @initial-values
+                                     :time
+                                     str))}
+          "Confirm Booking"]]]]]]))

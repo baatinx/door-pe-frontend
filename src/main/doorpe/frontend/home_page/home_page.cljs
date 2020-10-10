@@ -12,19 +12,4 @@
 
 (defn home-page
   []
-  ;; (go (let [res (<! (http/post "https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyAbe9OWF2GtQC2OaWv_ejspmj47novjdHw" {:with-credentials? false}))]
-        ;; (js/alert res)))
-
-  [:div "This is home page"])
-
-(defn showPosition
-  [position]
-  (js/alert position.coords.latitude)
-  (js/alert position.coords.longitude))
-
-(defn getLocation
-  []
-  (js/navigator.geolocation.getCurrentPosition showPosition))
-
-
-
+  [:div "Home Page"])

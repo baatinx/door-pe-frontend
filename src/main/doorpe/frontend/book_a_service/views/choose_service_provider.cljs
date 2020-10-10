@@ -17,38 +17,31 @@
             :style {:max-width :400px
                     :margin "30px"}}
    [:> CardContent
-    [:> Typography {:variant "h6"}
+    [:> Typography {:variant "h5"}
      name]
 
     [:br]
-    [:> Typography {:variant "button"}
+    [:> Typography {:variant "body1"}
      service-intro]
 
     [:br]
-    [:> Typography {:variant "button"}
+    [:> Typography
      (str "Service Charges : " service-charges)]
 
-    [:br]
-    [:> Typography {:variant "button"}
+    [:> Typography
      (str "Charges : " charges)]
 
-    [:br]
-    [:> Typography {:variant "button"}
+    [:> Typography
      (str "Experience : " experience)]
 
-    [:br]
-    [:> Typography {:variant "button"}
+    [:> Typography
      (str "Professional Degree Holder: " professional-degree-holder)]
 
-    [:br]
-    [:> Typography {:variant "button"}
+    [:> Typography
      (str "District : " district)]
 
-    [:br]
-    [:> Typography {:variant "button"}
+    [:> Typography
      (str "Address : " address)]
-
-    [:br]
 
     [:> Button {:variant :contained
                 :color :primary
