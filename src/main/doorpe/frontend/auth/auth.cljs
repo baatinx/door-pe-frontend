@@ -1,7 +1,7 @@
 (ns doorpe.frontend.auth.auth
-  (:require [reagent.core :as r]))
+  (:require [reagent.core :as reagent]))
 
-(def auth-state (r/atom {:authenticated? false
+(def auth-state (reagent/atom {:authenticated? false
                          :token nil
                          :user-id nil
                          :user-type nil

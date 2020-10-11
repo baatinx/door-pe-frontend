@@ -1,6 +1,6 @@
 (ns doorpe.frontend.auth.login
   (:require-macros [cljs.core.async.macros :refer [go]])
-  (:require [reagent.core :as r]
+  (:require [reagent.core :as reagent]
             [accountant.core :as accountant]
             [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
@@ -33,7 +33,7 @@
 
 (defn login []
   (let [initial-vaules {:username "" :password ""}
-        values (r/atom initial-vaules)]
+        values (reagent/atom initial-vaules)]
     [:> Container {:maxWidth "sm"}
      [:> Card
       [:> CardContent

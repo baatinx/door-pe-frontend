@@ -1,6 +1,6 @@
 (ns doorpe.frontend.register-customer.register-customer
   (:require-macros [cljs.core.async.macros :refer [go]])
-  (:require [reagent.core :as r]
+  (:require [reagent.core :as reagent]
             [accountant.core :as accountant]
             [doorpe.frontend.util :refer [backend-domain]]
             [doorpe.frontend.components.util :refer [two-br]]
@@ -75,7 +75,7 @@
 
 (defn register-customer []
   (let [initial-vaules {:name "" :contact "" :district "" :address "" :password "" :password-match ""}
-        values (r/atom initial-vaules)]
+        values (reagent/atom initial-vaules)]
     [:> Container {:maxWidth "sm"}
      [:> Card
       [:> CardContent
@@ -105,19 +105,45 @@
                       :label "Choose District"
                       :select :true
                       :on-change #(swap! values assoc :district (.. % -target -value))
-                      :id :address
-                      :helperText ""
                       :style {:width :200px}}
-        [:> MenuItem {:value :Srinagar}
+        [:> MenuItem {:value :srinagar}
          "Srinagar"]
-        [:> MenuItem {:value :Islamabad}
-         "Islamabad"]
-        [:> MenuItem {:value :Baramullah}
+        [:> MenuItem {:value :jammu}
+         "Jammu"]
+        [:> MenuItem {:value :bandipora}
+         "Bandipora "]
+        [:> MenuItem {:value :baramullah}
          "Baramullah"]
-        [:> MenuItem {:value :Kupwara}
+        [:> MenuItem {:value :budgam}
+         "Budgam"]
+        [:> MenuItem {:value :ganderbal}
+         "Ganderbal"]
+        [:> MenuItem {:value :kulgam}
+         "Kulgam"]
+        [:> MenuItem {:value :kupwara}
          "Kupwara"]
-        [:> MenuItem {:value :kishtiwar}
-         "kishtiwar"]]
+        [:> MenuItem {:value :pulwama}
+         "Pulwama"]
+        [:> MenuItem {:value :shopian}
+         "Shopian"]
+        [:> MenuItem {:value :doda}
+         "Doda"]
+        [:> MenuItem {:value :kathua}
+         "Kathua"]
+        [:> MenuItem {:value :kishtwar}
+         "Kishtwar"]
+        [:> MenuItem {:value :poonch}
+         "Poonch"]
+        [:> MenuItem {:value :rajouri}
+         "Rajouri"]
+        [:> MenuItem {:value :ramban}
+         "Ramban"]
+        [:> MenuItem {:value :reasi}
+         "Reasi"]
+        [:> MenuItem {:value :samba}
+         "Samba"]
+        [:> MenuItem {:value :udhampur}
+         "Udhampur"]]
 
        [two-br]
 

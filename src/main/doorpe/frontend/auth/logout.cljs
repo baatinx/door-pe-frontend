@@ -3,7 +3,7 @@
   (:require [accountant.core :as accountant]
             [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
-               [doorpe.frontend.util :refer [backend-domain]]
+            [doorpe.frontend.util :refer [backend-domain]]
             [doorpe.frontend.components.util :refer [two-br three-br]]
             [doorpe.frontend.auth.auth :as auth]
             [doorpe.frontend.db :as db]

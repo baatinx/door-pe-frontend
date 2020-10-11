@@ -1,6 +1,6 @@
 (ns doorpe.frontend.register-service-provider.register-service-provider
   (:require-macros [cljs.core.async.macros :refer [go]])
-  (:require [reagent.core :as r]
+  (:require [reagent.core :as reagent]
             [accountant.core :as accountant]
             [doorpe.frontend.util :refer [backend-domain]]
             [doorpe.frontend.components.util :refer [two-br]]
@@ -51,67 +51,94 @@
 
 (defn register-service-provider []
   (let [initial-vaules {:name "" :contact "" :district "" :address "" :password "" :password-match ""}
-        values (r/atom initial-vaules)]
-    [:> Container {:maxWidht "xs"
-                   :style {:margin-top :20px}}
-     [:> Typography {:variant :h6}
-      "Service Provider Registration"]
+        values (reagent/atom initial-vaules)]
+    [:> Container {:maxWidth "sm"}
+     [:> Card
+      [:> CardContent
+       [:> Typography {:variant :h6}
+        "Service Provider Registration"]
 
-     [:br]
+       [:br]
 
-     [:div
-      [:> TextField {:variant :outlined
-                     :label "Full Name"
-                     :type :text
-                     :id :name
-                     :on-change #(swap! values assoc :name (.. % -target -value))
-                     :helperText ""}]
-      [two-br]
+       [:div
+        [:> TextField {:variant :outlined
+                       :label "Full Name"
+                       :type :text
+                       :id :name
+                       :on-change #(swap! values assoc :name (.. % -target -value))
+                       :helperText ""}]
+        [two-br]
 
-      [:> TextField {:variant :outlined
-                     :label "Phone number"
-                     :type :number
-                     :on-change #(swap! values assoc :contact (.. % -target -value))
-                     :id :contact
-                     :helperText ""}]
-      [two-br]
+        [:> TextField {:variant :outlined
+                       :label "Phone number"
+                       :type :number
+                       :on-change #(swap! values assoc :contact (.. % -target -value))
+                       :id :contact
+                       :helperText ""}]
+        [two-br]
 
-      [:> TextField {:variant :outlined
-                     :label "Choose District"
-                     :select :true
-                     :on-change #(swap! values assoc :district (.. % -target -value))
-                     :id :address
-                     :helperText ""
-                     :style {:width :200px}}
-       [:> MenuItem {:value :Srinagar}
-        "Srinagar"]
-       [:> MenuItem {:value :Islamabad}
-        "Islamabad"]
-       [:> MenuItem {:value :Baramullah}
-        "Baramullah"]
-       [:> MenuItem {:value :Kupwara}
-        "Kupwara"]
-       [:> MenuItem {:value :kishtiwar}
-        "kishtiwar"]]
+        [:> TextField {:variant :outlined
+                       :label "Choose District"
+                       :select :true
+                       :on-change #(swap! values assoc :district (.. % -target -value))
+                       :style {:width :200px}}
+         [:> MenuItem {:value :srinagar}
+          "Srinagar"]
+         [:> MenuItem {:value :jammu}
+          "Jammu"]
+         [:> MenuItem {:value :bandipora}
+          "Bandipora "]
+         [:> MenuItem {:value :baramullah}
+          "Baramullah"]
+         [:> MenuItem {:value :budgam}
+          "Budgam"]
+         [:> MenuItem {:value :ganderbal}
+          "Ganderbal"]
+         [:> MenuItem {:value :kulgam}
+          "Kulgam"]
+         [:> MenuItem {:value :kupwara}
+          "Kupwara"]
+         [:> MenuItem {:value :pulwama}
+          "Pulwama"]
+         [:> MenuItem {:value :shopian}
+          "Shopian"]
+         [:> MenuItem {:value :doda}
+          "Doda"]
+         [:> MenuItem {:value :kathua}
+          "Kathua"]
+         [:> MenuItem {:value :kishtwar}
+          "Kishtwar"]
+         [:> MenuItem {:value :poonch}
+          "Poonch"]
+         [:> MenuItem {:value :rajouri}
+          "Rajouri"]
+         [:> MenuItem {:value :ramban}
+          "Ramban"]
+         [:> MenuItem {:value :reasi}
+          "Reasi"]
+         [:> MenuItem {:value :samba}
+          "Samba"]
+         [:> MenuItem {:value :udhampur}
+          "Udhampur"]]
 
-      [two-br]
+        [two-br]
 
-      [:> TextField {:variant :outlined
-                     :label "Full Address"
-                     :on-change #(swap! values assoc :address (.. % -target -value))
-                     :id :address
-                     :helperText ""}]
-      [two-br]
+        [:> TextField {:variant :outlined
+                       :label "Full Address"
+                       :on-change #(swap! values assoc :address (.. % -target -value))
+                       :id :address
+                       :helperText ""}]
+        [two-br]
 
-      [:> TextField {:variant :outlined
-                     :on-change #(swap! values assoc :password (.. % -target -value))
-                     :label :password
-                     :type :password
-                     :id :password
-                     :helperText "Password must include at-least one digit and one uppercase letter"}]
-      [two-br]
+        [:> TextField {:variant :outlined
+                       :on-change #(swap! values assoc :password (.. % -target -value))
+                       :label :password
+                       :type :password
+                       :id :password
+                       :helperText "Password must include at-least one digit and one uppercase letter"}]
+        [two-br]
 
-      [:> Button {:variant :contained
-                  :color :primary
-                  :on-click #(dispatch-register-as-customer @values)}
-       "Register"]]]))
+        [:> Button {:variant :contained
+                    :color :primary
+                    :on-click #(dispatch-register-as-customer @values)}
+         "Register"]]]]]))
