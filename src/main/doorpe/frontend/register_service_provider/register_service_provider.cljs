@@ -50,7 +50,7 @@
           (accountant/navigate! "/")))))
 
 (defn register-service-provider []
-  (let [initial-vaules {:name "" :contact "" :district "" :password "" :password-match ""}
+  (let [initial-vaules {:name "" :contact "" :district "" :password "" :re-enter-password ""}
         values (reagent/atom initial-vaules)]
     [:> Container {:maxWidth "sm"}
       [:> Paper {:variant :outlined
@@ -127,11 +127,21 @@
                        :on-change #(swap! values assoc :password (.. % -target -value))
                        :label :password
                        :type :password
-                       :id :password
                        :helperText "Password must include at-least one digit and one uppercase letter"}]
+        [two-br]
+
+        [:> TextField {:variant :outlined
+                       :on-change #(swap! values assoc :re-enter-password (.. % -target -value))
+                       :label "Re Enter password"
+                       :type :password
+                       :helperText "Re Enter password"}]
         [two-br]
 
         [:> Button {:variant :contained
                     :color :primary
-                    :on-click #(dispatch-register-as-customer @values)}
+                    :on-click #(let [password (:password @values)
+                                     re-enter-password (:re-enter-password @values)]
+                                 (if (= password re-enter-password)
+                                   (dispatch-register-as-customer @values)
+                                   (js/alert "Password Does not Match")))}
          "Register"]]]]))

@@ -35,8 +35,19 @@
                                     :headers {"Authorization" (auth/set-authorization)}}))
             status (-> res
                        :body
-                       :status)
-            _ (js/alert res)]
+                       :status)]
+        (if status
+          (accountant/navigate! "/my-bookings")
+          (js/alert ":-( something went worng, please try again later)")))))
+
+(defn reject-booking
+  [booking-id]
+  (go (let [url (str backend-domain "/reject-booking/" booking-id)
+            res (<! (http/post url {:with-credentials? false
+                                    :headers {"Authorization" (auth/set-authorization)}}))
+            status (-> res
+                       :body
+                       :status)]
         (if status
           (accountant/navigate! "/my-bookings")
           (js/alert ":-( something went worng, please try again later)")))))
@@ -96,10 +107,17 @@
     [:br]
 
     (if (= status "pending")
-      [:> Button {:variant :contained
-                  :color :secondary
-                  :on-click #(accept-booking booking-id)}
-       "Accept Booking"])]])
+      [:<>
+       [:> Button {:variant :contained
+                   :color :secondary
+                   :on-click #(accept-booking booking-id)}
+        "Accept Booking"]
+       [:br]
+       [:br]
+       [:> Button {:variant :contained
+                   :color :secondary
+                   :on-click #(reject-booking booking-id)}
+        "Reject Booking"]])]])
 
 (defn fetch-bookings
   []
@@ -107,8 +125,9 @@
                                                                    :headers {"Authorization" (auth/set-authorization)}}))
             bookings (:body res)
             c (count bookings)]
-        (and (> c 0)
-             (swap! db/app-db assoc  :my-bookings bookings)))))
+        (if  (> c 0)
+          (swap! db/app-db assoc :my-bookings bookings)
+          (swap! db/app-db assoc :my-bookings nil)))))
 
 (defn service-provider
   []
