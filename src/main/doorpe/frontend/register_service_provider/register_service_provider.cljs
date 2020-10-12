@@ -6,7 +6,7 @@
             [doorpe.frontend.components.util :refer [two-br]]
             [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
-            ["@material-ui/core" :refer [Container Typography TextField Button MenuItem
+            ["@material-ui/core" :refer [Container Typography TextField Button MenuItem Paper
                                          Select FormControl  Grid Card CardContent CardAction]]))
 
 (defn- js-promp-and-verify-user-otp?
@@ -50,11 +50,11 @@
           (accountant/navigate! "/")))))
 
 (defn register-service-provider []
-  (let [initial-vaules {:name "" :contact "" :district "" :address "" :password "" :password-match ""}
+  (let [initial-vaules {:name "" :contact "" :district "" :password "" :password-match ""}
         values (reagent/atom initial-vaules)]
     [:> Container {:maxWidth "sm"}
-     [:> Card
-      [:> CardContent
+      [:> Paper {:variant :outlined
+                    :square true}
        [:> Typography {:variant :h6}
         "Service Provider Registration"]
 
@@ -124,13 +124,6 @@
         [two-br]
 
         [:> TextField {:variant :outlined
-                       :label "Full Address"
-                       :on-change #(swap! values assoc :address (.. % -target -value))
-                       :id :address
-                       :helperText ""}]
-        [two-br]
-
-        [:> TextField {:variant :outlined
                        :on-change #(swap! values assoc :password (.. % -target -value))
                        :label :password
                        :type :password
@@ -141,4 +134,4 @@
         [:> Button {:variant :contained
                     :color :primary
                     :on-click #(dispatch-register-as-customer @values)}
-         "Register"]]]]]))
+         "Register"]]]]))

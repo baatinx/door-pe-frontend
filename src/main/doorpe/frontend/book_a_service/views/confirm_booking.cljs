@@ -7,7 +7,7 @@
             [doorpe.frontend.util :refer [backend-domain]]
             [doorpe.frontend.db :as db]
             [doorpe.frontend.auth.auth :as auth]
-            ["@material-ui/core" :refer [Grid Container Typography Card CardContent TextField Button MenuItem
+            ["@material-ui/core" :refer [Grid Container Paper Typography Card CardContent TextField Button MenuItem
                                          Select FormControl  Grid Card CardContent CardAction]]))
 
 (def location-coords (atom {}))
@@ -52,11 +52,11 @@
                                                   :longitude longitude}}))
             insert-status (-> res
                               :body
-                              :insert-status)]
+                              :status)]
         (if insert-status
           (accountant/navigate! "/my-bookings")
           (do
-            (js/alert "Booking Failed, please try agian later")
+            (js/alert ":-( Booking Failed, please try agian later")
             (swap! db/app-db :assoc :book-a-service nil)
             (accountant/navigate! "/dashboard"))))))
 
@@ -72,51 +72,51 @@
 
      [:br]
 
-     [:> Card
-      [:> CardContent
+      [:> Paper {:variant :outlined
+                    :square true}
 
-       [:> Grid {:container true}
-        [:> Grid {:item true
-                  :xs 6}
-         [:> Typography {:variant "button"}
-          "Choose Booking Date"]]
+      [:> Grid {:container true}
+       [:> Grid {:item true
+                 :xs 6}
+        [:> Typography {:variant "button"}
+         "Choose Booking Date"]]
 
-        [:> Grid {:item true
-                  :xs 6}
-         [:> TextField
-          {:variant :outlined
-           :type :date
-           :on-change #(swap! initial-values assoc :date (.. % -target -value))}]]]
+       [:> Grid {:item true
+                 :xs 6}
+        [:> TextField
+         {:variant :outlined
+          :type :date
+          :on-change #(swap! initial-values assoc :date (.. % -target -value))}]]]
 
-       [:br]
+      [:br]
 
-       [:> Grid {:container true}
-        [:> Grid {:item true
-                  :xs 6}
-         [:> Typography {:variant "button"}
-          "Choose Booking Timming"]]
+      [:> Grid {:container true}
+       [:> Grid {:item true
+                 :xs 6}
+        [:> Typography {:variant "button"}
+         "Choose Booking Timming"]]
 
-        [:> Grid {:item true
-                  :xs 6}
-         [:> TextField
-          {:variant :outlined
-           :type :time
-           :on-change #(swap! initial-values assoc :time (.. % -target -value))}]]]
+       [:> Grid {:item true
+                 :xs 6}
+        [:> TextField
+         {:variant :outlined
+          :type :time
+          :on-change #(swap! initial-values assoc :time (.. % -target -value))}]]]
 
-       [:br]
+      [:br]
 
-       [:> Grid {:container true
-                 :justify :center
-                 :align :center}
-        [:> Grid {:item true
-                  :xs 6}
-         [:> Button {:variant :contained
-                     :color :primary
-                     :on-click #(make-booking
-                                 (-> @initial-values
-                                     :date
-                                     str)
-                                 (-> @initial-values
-                                     :time
-                                     str))}
-          "Confirm Booking"]]]]]]))
+      [:> Grid {:container true
+                :justify :center
+                :align :center}
+       [:> Grid {:item true
+                 :xs 6}
+        [:> Button {:variant :contained
+                    :color :primary
+                    :on-click #(make-booking
+                                (-> @initial-values
+                                    :date
+                                    str)
+                                (-> @initial-values
+                                    :time
+                                    str))}
+         "Confirm Booking"]]]]]))

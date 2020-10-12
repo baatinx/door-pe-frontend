@@ -8,7 +8,7 @@
             [doorpe.frontend.components.util :refer [two-br]]
             [doorpe.frontend.auth.auth :as auth]
             [doorpe.frontend.db :as db]
-            ["@material-ui/core" :refer [Container Typography TextField Button MenuItem
+            ["@material-ui/core" :refer [Container Typography TextField Button MenuItem Paper
                                          Select FormControl  Grid Card CardContent CardAction]]))
 (defn do-login
   [{username :username password :password}]
@@ -35,28 +35,28 @@
   (let [initial-vaules {:username "" :password ""}
         values (reagent/atom initial-vaules)]
     [:> Container {:maxWidth "sm"}
-     [:> Card
-      [:> CardContent
-       [:> Typography {:variant :h6}
-        "Login"]
+      [:> Paper {:variant :outlined
+                    :square true}
+      [:> Typography {:variant :h6}
+       "Login"]
 
-       [:br]
-       [:> TextField {:variant :outlined
-                      :label "Phone Number"
-                      :id :username
-                      :on-change #(swap! values assoc :username (.. % -target -value))
-                      :helperText "Phone Number should be of 10 digit"}]
-       [two-br]
-       [:> TextField {:variant :outlined
-                      :label "Your Password"
-                      :id :password
-                      :on-change #(swap! values assoc :password (.. % -target -value))
-                      :type :password
-                      :helperText ""}]
+      [:br]
+      [:> TextField {:variant :outlined
+                     :label "Phone Number"
+                     :id :username
+                     :on-change #(swap! values assoc :username (.. % -target -value))
+                     :helperText "Phone Number should be of 10 digit"}]
+      [two-br]
+      [:> TextField {:variant :outlined
+                     :label "Your Password"
+                     :id :password
+                     :on-change #(swap! values assoc :password (.. % -target -value))
+                     :type :password
+                     :helperText ""}]
 
-       [two-br]
+      [two-br]
 
-       [:> Button {:variant :contained
-                   :color :primary
-                   :on-click #(do-login @values)}
-        "Login"]]]]))
+      [:> Button {:variant :contained
+                  :color :primary
+                  :on-click #(do-login @values)}
+       "Login"]]]))

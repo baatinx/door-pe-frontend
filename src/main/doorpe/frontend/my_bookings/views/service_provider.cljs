@@ -35,11 +35,11 @@
                                     :headers {"Authorization" (auth/set-authorization)}}))
             status (-> res
                        :body
-                       :status)]
+                       :status)
+            _ (js/alert res)]
         (if status
-          (do
-            (accountant/navigate! "/my-bookings"))
-          (accountant/navigate! "/dashboard")))))
+          (accountant/navigate! "/my-bookings")
+          (js/alert ":-( something went worng, please try again later)")))))
 
 (defn render-my-bookings
   [{:keys [booking-id customer-name customer-contact customer-address service-name booking-on service-on service-time latitude longitude status]}]
