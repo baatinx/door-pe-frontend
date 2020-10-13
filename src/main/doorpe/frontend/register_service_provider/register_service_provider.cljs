@@ -100,6 +100,8 @@
           "Kupwara"]
          [:> MenuItem {:value :pulwama}
           "Pulwama"]
+         [:> MenuItem {:value :islamabad}
+          "Islamabad"]
          [:> MenuItem {:value :shopian}
           "Shopian"]
          [:> MenuItem {:value :doda}

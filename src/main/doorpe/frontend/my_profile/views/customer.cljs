@@ -177,7 +177,7 @@
            [:> Grid {:item true
                      :xs 9}
             [:> TextField {:variant :outlined
-                            :label (:district initial-values)
+                           :label (:district initial-values)
                            :select :true
                            :on-change #(swap! my-profile assoc :district (.. % -target -value))
                            :style {:width :200px}}
@@ -195,8 +195,8 @@
               "Ganderbal"]
              [:> MenuItem {:value :kulgam}
               "Kulgam"]
-             [:> MenuItem {:value :kupwara}
-              "Kupwara"]
+             [:> MenuItem {:value :islamabad}
+              "Islamabad"]
              [:> MenuItem {:value :pulwama}
               "Pulwama"]
              [:> MenuItem {:value :shopian}

@@ -40,9 +40,6 @@
     [:> Typography
      (str "District : " district)]
 
-    [:> Typography
-     (str "Address : " address)]
-
     [:> Button {:variant :contained
                 :color :primary
                 :on-click #(do

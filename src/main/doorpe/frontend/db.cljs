@@ -4,5 +4,6 @@
 (def app-db (reagent/atom {:my-profile nil
                            :my-bookings nil
                            :book-a-service nil
+                           :add-a-service nil
                            :admin-add ""
                            :admin-edit ""}))

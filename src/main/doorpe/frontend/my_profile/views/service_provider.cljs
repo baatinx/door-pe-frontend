@@ -192,6 +192,8 @@
               "Kulgam"]
              [:> MenuItem {:value :kupwara}
               "Kupwara"]
+             [:> MenuItem {:value :islamabad}
+              "Islamabad"]
              [:> MenuItem {:value :pulwama}
               "Pulwama"]
              [:> MenuItem {:value :shopian}
