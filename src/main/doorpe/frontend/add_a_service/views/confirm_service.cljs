@@ -48,7 +48,7 @@
     [:> Container {:maxWidth "sm"}
      [:> Paper {:variant :outlined
                 :square true}
-      [:> Typography {:variant :h6}
+      [:> Typography
        "Add Service"]
 
       [:br]
@@ -66,11 +66,10 @@
                        :on-change #(swap! values assoc :charges (.. % -target -value))}]
 
         [:> TextField {:variant :outlined
-                       :label "*Charges will be disscussed on Inspection"
+                       :label "Charges on Inspection"
                        :type :number
                        :disabled true
-                       :error true
-                       :color :secondary}])
+                       :error true}])
 
       [two-br]
 

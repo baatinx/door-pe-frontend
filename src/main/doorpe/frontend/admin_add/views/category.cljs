@@ -12,11 +12,13 @@
 
 (defn add-category
   [{:keys [name description]}]
-  (go (let [url (str  backend-domain "/admin-add/category")
+  (go (let [my-file  (-> (.getElementById js/document "my-file")
+                         .-files first)
+            url (str  backend-domain "/admin-add/category")
             res (<! (http/post url {:with-credentials? false
                                     :headers {"Authorization" (auth/set-authorization)}
-                                    :form-params {:name name
-                                                  :description description}}))]
+                                    :multipart-params [[:name name]
+                                                       [:description description] ["my-file" my-file]]}))]
         (accountant/navigate! "/dashboard"))))
 
 (defn category
@@ -49,6 +51,13 @@
                        :style {:width :500px}}]
         [:br]
         [:br]
+
+        [:input {:type :file
+                 :id :my-file}]
+
+        [:br]
+        [:br]
+
         [:> Button {:variant :contained
                     :color :secondary
                     :on-click #(add-category @values)}

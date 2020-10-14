@@ -12,19 +12,31 @@
 (defn degree-holder-consent
   []
   [:> Container {:maxWidth :sm}
-   [:> Card
-    [:> CardContent
-     [:> Typography "Degree Holder Consent"]
-     [:br]
+   [:> Paper {:square true
+              :style {:padding "20px"}}
+    [:> Grid {:container true
+              :spacing 10}
+     [:> Grid {:item true
+               :xs 12}
+      [:> Typography "Degree Holder Consent"]]]
 
-     [:> Typography {:variant :caption}
-      "Do you possed a valid professional degree?"]
-     [:br ]
-     [:br ]
-     [:> Button {:variant :outlined
-                 :on-click #(swap! db/app-db update-in [:add-a-service] assoc :degree-holder-consent? true)}
-      "YES"]
+    [:> Grid {:container true
+              :spacing 5}
+     [:> Grid {:item true
+               :xs 6}
+      [:> Typography {:variant :caption}
+       "Do you posses a valid professional degree?"]]
+     [:> Grid {:item true
+               :xs 6}
 
-     [:> Button {:variant :outlined
-                 :on-click #(swap! db/app-db update-in [:add-a-service] assoc :degree-holder-consent? false)}
-      "NO"]]]])
+      [:> Grid {:container true}
+       [:> Grid {:item true
+                 :xs 6}
+        [:> Button {:variant :outlined
+                    :on-click #(swap! db/app-db update-in [:add-a-service] assoc :degree-holder-consent? true)}
+         "YES"]]
+       [:> Grid {:item true
+                 :xs 6}
+        [:> Button {:variant :outlined
+                    :on-click #(swap! db/app-db update-in [:add-a-service] assoc :degree-holder-consent? false)}
+         "NO"]]]]]]])
