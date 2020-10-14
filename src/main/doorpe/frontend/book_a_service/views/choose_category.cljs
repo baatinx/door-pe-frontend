@@ -4,6 +4,7 @@
             [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
             [accountant.core :as accountant]
+            [clojure.string :as string]
             [doorpe.frontend.db :as db]
             [doorpe.frontend.util :refer [backend-domain]]
             ["@material-ui/core" :refer [Grid Container Typography Card CardContent TextField Button MenuItem
@@ -12,11 +13,12 @@
 (def categories (reagent/atom {:categories nil}))
 
 (defn render-categories
- [{:keys [_id name description]}]
+ [{:keys [_id name description img]}]
   [:> Card {:variant :outlined
             :style {:max-width :400px
                     :margin "30px"}}
    [:> CardContent
+    [:img {:src img}]
     [:> Typography {:variant "h5"}
      name]
 
