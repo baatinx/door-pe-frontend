@@ -17,9 +17,11 @@
       true
       (and (js/alert "Invalid OTP") false))))
 
-(defn dispatch-register-as-customer
+(defn dispatch-register-as-service-provider
   [{:keys [name contact district address password]}]
-  (go (let [url (str  backend-domain "/send-otp/" contact)
+  (go (let [my-file  (-> (.getElementById js/document "my-file")
+                         .-files first)
+            url (str  backend-domain "/send-otp/" contact)
             response (<! (http/get url {:with-credentials? false}))
             is-everything-ok? (and (= 200 (:status response))
                                    (:success response)
@@ -33,12 +35,13 @@
                  expected-otp
                  (js-promp-and-verify-user-otp? expected-otp))
           (let [db-response (<!  (http/post (str backend-domain "/register") {:with-credentials? false
-                                                                              :form-params {:name name
-                                                                                            :contact contact
-                                                                                            :district district
-                                                                                            :address address
-                                                                                            :password password
-                                                                                            :user-type "service-provider"}}))
+                                                                              :multipart-params [[:name name]
+                                                                                                 [:contact contact]
+                                                                                                 [:district district]
+                                                                                                 [:address address]
+                                                                                                 [:password password]
+                                                                                                 [:user-type "service-provider"]
+                                                                                                 ["my-file" my-file]]}))
                 inserted? (get-in db-response [:body :insert-status])]
             (if inserted?
               (do
@@ -75,6 +78,10 @@
                        :on-change #(swap! values assoc :contact (.. % -target -value))
                        :id :contact
                        :helperText ""}]
+        [two-br]
+
+        [:input {:type :file
+                 :id :my-file}]
         [two-br]
 
         [:> TextField {:variant :outlined
@@ -144,6 +151,6 @@
                     :on-click #(let [password (:password @values)
                                      re-enter-password (:re-enter-password @values)]
                                  (if (= password re-enter-password)
-                                   (dispatch-register-as-customer @values)
+                                   (dispatch-register-as-service-provider @values)
                                    (js/alert "Password Does not Match")))}
          "Register"]]]]))

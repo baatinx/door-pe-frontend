@@ -18,7 +18,8 @@
             res (<! (http/post url {:with-credentials? false
                                     :headers {"Authorization" (auth/set-authorization)}
                                     :multipart-params [[:name name]
-                                                       [:description description] ["my-file" my-file]]}))]
+                                                       [:description description]
+                                                       ["my-file" my-file]]}))]
         (accountant/navigate! "/dashboard"))))
 
 (defn category

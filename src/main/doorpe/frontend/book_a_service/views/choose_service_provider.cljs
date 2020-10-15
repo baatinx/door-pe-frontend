@@ -12,13 +12,15 @@
 (def service-providers (reagent/atom {:service-providers nil}))
 
 (defn render-service-providers
-  [{:keys [_id name district address service-charges service-intro charges experience professional-degree-holder]}]
+  [{:keys [_id name district service-charges service-intro charges experience professional-degree-holder img]}]
   [:> Card {:variant :outlined
             :style {:max-width :400px
                     :margin "30px"}}
    [:> CardContent
     [:> Typography {:variant "h5"}
      name]
+    [:img {:src img
+           :style {:height :80px}}]
 
     [:br]
     [:> Typography {:variant "body1"}
@@ -28,8 +30,13 @@
     [:> Typography
      (str "Service Charges : " service-charges)]
 
-    [:> Typography
-     (str "Charges : " charges)]
+    (if charges
+      [:> Typography
+       (str "Charges : " charges)]
+
+      [:> Typography {:color :secondary
+                      :style {:font-weight :bold}}
+       (str "Charges : On Inspection ")])
 
     [:> Typography
      (str "Experience : " experience)]

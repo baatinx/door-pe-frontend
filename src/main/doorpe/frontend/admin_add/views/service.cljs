@@ -21,14 +21,17 @@
 
 (defn add-service
   [{:keys [name category-id charge-type critical-service description]}]
-  (go (let [url (str  backend-domain "/admin-add/service")
+  (go (let [my-file  (-> (.getElementById js/document "my-file")
+                         .-files first)
+            url (str  backend-domain "/admin-add/service")
             res (<! (http/post url {:with-credentials? false
                                     :headers {"Authorization" (auth/set-authorization)}
-                                    :form-params {:name name
-                                                  :category-id category-id
-                                                  :charge-type charge-type
-                                                  :critical-service critical-service
-                                                  :description description}}))]
+                                    :multipart-params [[:name name]
+                                                       [:category-id category-id]
+                                                       [:charge-type charge-type]
+                                                       [:critical-service critical-service]
+                                                       [:description description]
+                                                       ["my-file" my-file]]}))]
         (accountant/navigate! "/dashboard"))))
 
 (defn render-menu-items
@@ -109,6 +112,12 @@
                            :placeholder " Add Service Description ..."
                            :rows :10
                            :style {:width :500px}}]
+            [:br]
+            [:br]
+
+            [:input {:type :file
+                     :id :my-file}]
+
             [:br]
             [:br]
             [:> Button {:variant :contained

@@ -12,6 +12,10 @@
 (defn degree-holder-consent
   []
   [:> Container {:maxWidth :sm}
+   [:> Button {:variant :contained
+               :color :secondary
+               :on-click #(swap! db/app-db update-in [:add-a-service] dissoc :service-id)}
+    "Go Back"]
    [:> Paper {:square true
               :style {:padding "20px"}}
     [:> Grid {:container true

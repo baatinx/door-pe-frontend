@@ -34,7 +34,6 @@
         res (<! (http/post url {:with-credentials? false
                                 :headers {"Authorization" (auth/set-authorization)}
                                 :form-params form-params}))]
-    (js/alert res)
     (accountant/navigate! "/dashboard")))
 
 (defn confirm-service

@@ -53,7 +53,7 @@
           (js/alert ":-( something went worng, please try again later)")))))
 
 (defn render-my-bookings
-  [{:keys [booking-id customer-name customer-contact customer-address service-name booking-on service-on service-time latitude longitude status]}]
+  [{:keys [booking-id customer-name customer-address service-name booking-on service-on service-time latitude longitude status img]}]
   [:> Card {:variant :outlined
             :style {:max-width :400px
                     :margin "30px"}}
@@ -64,6 +64,9 @@
     [:br]
     [:> Typography {:variant "button"}
      (str "Customer Name : " customer-name)]
+
+      [:img {:src img
+             :style {:height :80px}}]
 
     [:br]
 

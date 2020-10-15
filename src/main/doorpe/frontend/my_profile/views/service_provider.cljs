@@ -44,12 +44,12 @@
                  :pin-code (:pin-code user-details)
                  :district (:district user-details)
                  :latitude (:latitude user-details)
-                 :longitude (:longitude user-details)}]
+                 :longitude (:longitude user-details)
+                 :img (:img user-details)}]
         (reset! my-profile doc))))
 
 (defn update-my-profile
   [updated-details]
-  (js/alert updated-details)
   (go (let [url (str backend-domain "/update-my-profile")
             res  (<! (http/post url {:with-credentials? false
                                      :headers {"Authorization" (auth/set-authorization)}
@@ -61,15 +61,17 @@
   (let [_ (set-location-coords)
         _ (fetch-service-provider-details)]
     (fn []
-      (let [initial-values {:name (:name @my-profile)
-                            :contact (:contact @my-profile)
-                            :email (:email @my-profile)
-                            :age (:age @my-profile)
-                            :gender (:gender @my-profile)
-                            :pin-code (:pin-code @my-profile)
-                            :district (:district @my-profile)
-                            :latitude (:latitude @my-profile)
-                            :longitude (:longitude @my-profile)}
+      (let [customer @my-profile
+            initial-values {:name (:name customer)
+                            :contact (:contact customer)
+                            :email (:email customer)
+                            :age (:age customer)
+                            :gender (:gender customer)
+                            :pin-code (:pin-code customer)
+                            :district (:district customer)
+                            :latitude (:latitude customer)
+                            :longitude (:longitude customer)
+                            :img (:img customer)}
             values (reagent/atom initial-values)]
         [:> Container {:maxWidth "sm"}
          [:> Paper {:variant :outlined
@@ -77,6 +79,10 @@
           [:> Typography {:variant :h6}
            "My Profile"]
           [:br]
+
+          [:img {:src (:img initial-values)
+                 :style {:width :100px
+                         :border-radius :4px}}]
 
           [:> Grid {:container true
                     :alignItems :center

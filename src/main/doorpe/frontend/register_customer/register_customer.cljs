@@ -39,6 +39,8 @@
 (defn dispatch-register-as-customer
   [{:keys [name contact district address password]}]
   (go (let [_  (set-location-coords)
+            my-file  (-> (.getElementById js/document "my-file")
+                         .-files first)
             url (str  backend-domain "/send-otp/" contact)
             response (<! (http/get url {:with-credentials? false}))
             is-everything-ok? (and (= 200 (:status response))
@@ -55,14 +57,15 @@
           (let [latitude (:latitude @location-coords)
                 longitude (:longitude @location-coords)
                 db-response (<!  (http/post (str backend-domain "/register") {:with-credentials? false
-                                                                              :form-params {:name name
-                                                                                            :contact contact
-                                                                                            :district district
-                                                                                            :address address
-                                                                                            :password password
-                                                                                            :user-type "customer"
-                                                                                            :latitude latitude
-                                                                                            :longitude longitude}}))
+                                                                              :multipart-params [[:name name]
+                                                                                                 [:contact contact]
+                                                                                                 [:district district]
+                                                                                                 [:address address]
+                                                                                                 [:password password]
+                                                                                                 [:user-type "customer"]
+                                                                                                 [:latitude latitude]
+                                                                                                 [:longitude longitude]
+                                                                                                 ["my-file" my-file]]}))
                 inserted? (get-in db-response [:body :insert-status])]
             (if inserted?
               (do
@@ -99,6 +102,10 @@
                      :on-change #(swap! values assoc :contact (.. % -target -value))
                      :id :contact
                      :helperText ""}]
+      [two-br]
+
+      [:input {:type :file
+               :id :my-file}]
       [two-br]
 
       [:> TextField {:variant :outlined

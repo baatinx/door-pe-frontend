@@ -12,11 +12,13 @@
 (def categories (reagent/atom {:categories nil}))
 
 (defn render-categories
- [{:keys [_id name description]}]
+ [{:keys [_id name description img]}]
   [:> Card {:variant :outlined
             :style {:max-width :400px
                     :margin "30px"}}
    [:> CardContent
+    [:img {:src img
+           :style {:height :250px}}]
     [:> Typography {:variant "h5"}
      name]
 
