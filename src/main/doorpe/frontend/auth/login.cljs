@@ -4,11 +4,11 @@
             [accountant.core :as accountant]
             [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
-            [doorpe.frontend.util :refer [backend-domain]]
+            [doorpe.frontend.util :refer [backend-domain check-validity]]
             [doorpe.frontend.components.util :refer [two-br]]
             [doorpe.frontend.auth.auth :as auth]
             [doorpe.frontend.db :as db]
-            ["@material-ui/core" :refer [Container Typography TextField Button MenuItem Paper
+            ["@material-ui/core" :refer [Container Typography TextField Button MenuItem Paper Link
                                          Select FormControl  Grid Card CardContent CardAction]]))
 (defn do-login
   [{username :username password :password}]
@@ -30,24 +30,28 @@
             (js/alert ":-( Invalid Username/Password")
             (accountant/dispatch-current!))))))
 
-
 (defn login []
   (let [initial-vaules {:username "" :password ""}
         values (reagent/atom initial-vaules)]
     [:> Container {:maxWidth "sm"}
-      [:> Paper {:variant :outlined
-                    :square true}
+     [:> Paper {:variant :outlined
+                :square true}
       [:> Typography {:variant :h6}
        "Login"]
 
       [:br]
       [:> TextField {:variant :outlined
-                     :label "Phone Number"
                      :id :username
+                     :type :number
+                     :label "Phone Number"
+                     :InputProps {:inputProps {:min 0
+                                               :max 9999999999}}
+                     :required true
                      :on-change #(swap! values assoc :username (.. % -target -value))
                      :helperText "Phone Number should be of 10 digit"}]
       [two-br]
       [:> TextField {:variant :outlined
+                     :required true
                      :label "Your Password"
                      :id :password
                      :on-change #(swap! values assoc :password (.. % -target -value))
@@ -58,5 +62,19 @@
 
       [:> Button {:variant :contained
                   :color :primary
-                  :on-click #(do-login @values)}
-       "Login"]]]))
+                  :on-click #(check-validity @values ["username" "password"] do-login)}
+       "Login"]
+
+      [:> Typography
+       "Forgot password? "
+       [:> Link {:on-click #(accountant/navigate! "/")
+                 :style {:cursor :pointer}}
+        " click here"]]
+
+      [:br]
+
+      [:> Typography
+       "Don't have Account? Sign up "
+       [:> Link {:on-click #(accountant/navigate! "/register")
+                 :style {:cursor :pointer}}
+        " here"]]]]))

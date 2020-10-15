@@ -2,11 +2,11 @@
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [reagent.core :as reagent]
             [accountant.core :as accountant]
-            [doorpe.frontend.util :refer [backend-domain]]
+            [doorpe.frontend.util :refer [backend-domain check-validity]]
             [doorpe.frontend.components.util :refer [two-br]]
             [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
-            ["@material-ui/core" :refer [Container Typography TextField Button MenuItem Paper
+            ["@material-ui/core" :refer [Container Typography TextField Button MenuItem Paper Checkbox
                                          Select FormControl  Grid Card CardContent CardAction]]))
 
 (defn- js-promp-and-verify-user-otp?
@@ -21,7 +21,9 @@
   [{:keys [name contact district address password]}]
   (go (let [my-file  (-> (.getElementById js/document "my-file")
                          .-files first)
-            url (str  backend-domain "/send-otp/" contact)
+            otp-checkbox-checked? (.-checked (.getElementById js/document "otp-checkbox"))
+            otp-method (if otp-checkbox-checked? "voice" "text")
+            url (str  backend-domain "/send-otp/" contact "/" otp-method)
             response (<! (http/get url {:with-credentials? false}))
             is-everything-ok? (and (= 200 (:status response))
                                    (:success response)
@@ -68,20 +70,25 @@
                        :label "Full Name"
                        :type :text
                        :id :name
+                       :required true
                        :on-change #(swap! values assoc :name (.. % -target -value))
                        :helperText ""}]
         [two-br]
 
         [:> TextField {:variant :outlined
                        :label "Phone number"
-                       :type :number
-                       :on-change #(swap! values assoc :contact (.. % -target -value))
                        :id :contact
+                       :type :number
+                       :required true
+                       :InputProps {:inputProps {:min 0
+                                                 :max 9999999999}}
+                       :on-change #(swap! values assoc :contact (.. % -target -value))
                        :helperText ""}]
         [two-br]
 
         [:input {:type :file
-                 :id :my-file}]
+                 :id :my-file
+                 :required true}]
         [two-br]
 
         [:> TextField {:variant :outlined
@@ -133,6 +140,8 @@
         [two-br]
 
         [:> TextField {:variant :outlined
+                       :required true
+                       :id :password
                        :on-change #(swap! values assoc :password (.. % -target -value))
                        :label :password
                        :type :password
@@ -142,15 +151,23 @@
         [:> TextField {:variant :outlined
                        :on-change #(swap! values assoc :re-enter-password (.. % -target -value))
                        :label "Re Enter password"
+                       :required true
+                       :id :re-enter-password
                        :type :password
                        :helperText "Re Enter password"}]
         [two-br]
+
+        [:<>
+         [:> Checkbox {:id :otp-checkbox}]
+         [:> Typography {:variant :caption
+                         :style {:display :inline-block}} "Send me Voice OTP instead of text SMS"]]
+        [:br]
 
         [:> Button {:variant :contained
                     :color :primary
                     :on-click #(let [password (:password @values)
                                      re-enter-password (:re-enter-password @values)]
                                  (if (= password re-enter-password)
-                                   (dispatch-register-as-service-provider @values)
+                                   (check-validity @values ["name" "contact" "my-file" "password" "re-enter-password"] dispatch-register-as-service-provider)
                                    (js/alert "Password Does not Match")))}
          "Register"]]]]))
