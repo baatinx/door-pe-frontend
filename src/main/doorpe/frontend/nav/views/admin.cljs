@@ -28,5 +28,7 @@
                  :on-click #(do
                               (swap! db/app-db assoc :admin-edit "service")
                               (accountant/navigate! "/admin-edit"))}]
+      [nav-link {:text "Service Requests"
+                 :on-click #(accountant/navigate! "/admin-service-requests")}]
       [nav-link {:text "Logout"
                  :on-click #(accountant/navigate! "/logout")}]]]]])

@@ -25,7 +25,8 @@
             [doorpe.frontend.auth.logout :refer [logout]]
 
             [doorpe.frontend.admin-add.admin-add :refer [admin-add]]
-            [doorpe.frontend.admin-edit.admin-edit :refer [admin-edit]]))
+            [doorpe.frontend.admin-edit.admin-edit :refer [admin-edit]]
+            [doorpe.frontend.admin-service-requests.admin-service-requests :refer [admin-service-requests]]))
 
 (defonce page (reagent/atom #'home-page))
 
@@ -87,7 +88,10 @@
     (reset! page #'admin-add))
 
   (secretary/defroute "/admin-edit" []
-    (reset! page #'admin-edit)))
+    (reset! page #'admin-edit))
+
+  (secretary/defroute "/admin-service-requests" []
+    (reset! page #'admin-service-requests)))
 
 (defn ^:dev/after-load start
   []

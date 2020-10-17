@@ -13,28 +13,33 @@
 
 (defn dispatch-add-a-service
   [{:keys [service-charges charges experience service-intro degree-title]}]
-  (let [url (str backend-domain "/add-a-service")
-        add-a-service (:add-a-service @db/app-db)
-        by-default-critical-service? (:by-default-critical-service? add-a-service)
-        degree-holder-consent? (:degree-holder-consent? add-a-service)
-        charge-type (:charge-type add-a-service)
-        service-id (:service-id add-a-service)
-        doc {:service-id service-id
-             :service-charges service-charges
-             :experience experience
-             :service-intro service-intro}
-        degree  (if (or by-default-critical-service? degree-holder-consent?)
-                  (merge doc {:professional-degree-holder true
-                              :degree-title degree-title
-                              :certificate "certificate.png"})
-                  (merge doc {:professional-degree-holder false}))
-        form-params (if (= "fixed" charge-type)
-                      (merge degree {:charges charges})
-                      degree)
-        res (<! (http/post url {:with-credentials? false
-                                :headers {"Authorization" (auth/set-authorization)}
-                                :form-params form-params}))]
-    (accountant/navigate! "/dashboard")))
+  (go (let [url (str backend-domain "/add-a-service")
+            add-a-service (:add-a-service @db/app-db)
+            by-default-critical-service? (:by-default-critical-service? add-a-service)
+            degree-holder-consent? (:degree-holder-consent? add-a-service)
+            charge-type (:charge-type add-a-service)
+            service-id (:service-id add-a-service)
+            base-doc {:service-id service-id
+                      :service-charges service-charges
+                      :experience experience
+                      :service-intro service-intro}
+            degree  (if (or by-default-critical-service? degree-holder-consent?)
+                      (let [my-file  (-> (.getElementById js/document "my-file")
+                                         .-files first)]
+                        (merge base-doc {:professional-degree-holder true
+                                         :degree-title degree-title
+                                         :my-file my-file}))
+                      (merge base-doc {:professional-degree-holder false}))
+            params (if (= "fixed" charge-type)
+                     (merge degree {:charges charges})
+                     degree)
+
+            res (<! (http/post url {:with-credentials? false
+                                    :headers {"Authorization" (auth/set-authorization)}
+                                    :multipart-params (seq params)}))
+            _ (js/alert "aldfj")]
+        (js/alert "aldfj")
+        (accountant/navigate! "/dashboard"))))
 
 (defn confirm-service
   []
@@ -99,11 +104,9 @@
                         :helper-text "e.g 2 years Diploma in / 3 month training in  - "}]
          [two-br]
 
-         [:input {:accept :image/.*
-                  :id :contained-button-file
-                  :multiple false
-                  :type :file}]
-
+         [:input {:type :file
+                  :id :my-file
+                  :required true}]
 
          [two-br]])
 
