@@ -18,6 +18,8 @@
                  :on-click #(do
                               (swap! db/app-db assoc :provide-service nil)
                               (accountant/navigate! "/provide-service"))}]
+      [nav-link {:text "Book Complaint"
+                 :on-click #(accountant/navigate! "/book-complaint")}]
       [nav-link {:text "My Profile"
                  :on-click #(accountant/navigate! "/my-profile")}]
       [nav-link {:text "Logout"

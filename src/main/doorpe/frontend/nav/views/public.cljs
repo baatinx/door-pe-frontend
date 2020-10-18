@@ -13,8 +13,6 @@
                  :on-click #(accountant/navigate! "/")}]
       [nav-link {:text "Register"
                  :on-click #(accountant/navigate! "/register")}]
-      [nav-link {:text "Book Complaint"
-                 :on-click #(accountant/navigate! "/book-complaint")}]
       [nav-link {:text "Feedback"
                  :on-click #(accountant/navigate! "/feedback")}]
       [nav-link {:text "About Us"

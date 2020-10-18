@@ -14,12 +14,12 @@
                  :on-click #(accountant/navigate! "/dashboard")}]
       [nav-link {:text "My Bookings"
                  :on-click #(accountant/navigate! "/my-bookings")}]
-      [nav-link {:text "Book a Service"
+      [nav-link {:text "Book Service"
                  :on-click #(do
                               (swap! db/app-db assoc :book-service nil)
                               (accountant/navigate! "/book-service"))}]
-      [nav-link {:text "shw states"
-                 :on-click #(js/alert @db/app-db)}]
+      [nav-link {:text "Book Complaint"
+                 :on-click #(accountant/navigate! "/book-complaint")}]
       [nav-link {:text "My Profile"
                  :on-click #(accountant/navigate! "/my-profile")}]
       [nav-link {:text "Logout"
