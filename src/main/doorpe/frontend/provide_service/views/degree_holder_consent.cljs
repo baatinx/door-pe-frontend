@@ -1,4 +1,4 @@
-(ns doorpe.frontend.add-a-service.views.degree-holder-consent
+(ns doorpe.frontend.provide-service.views.degree-holder-consent
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [reagent.core :as reagent]
             [cljs-http.client :as http]
@@ -14,7 +14,7 @@
   [:> Container {:maxWidth :sm}
    [:> Button {:variant :contained
                :color :secondary
-               :on-click #(swap! db/app-db update-in [:add-a-service] dissoc :service-id)}
+               :on-click #(swap! db/app-db update-in [:provide-service] dissoc :service-id)}
     "Go Back"]
    [:> Paper {:square true
               :style {:padding "20px"}}
@@ -37,10 +37,10 @@
        [:> Grid {:item true
                  :xs 6}
         [:> Button {:variant :outlined
-                    :on-click #(swap! db/app-db update-in [:add-a-service] assoc :degree-holder-consent? true)}
+                    :on-click #(swap! db/app-db update-in [:provide-service] assoc :degree-holder-consent? true)}
          "YES"]]
        [:> Grid {:item true
                  :xs 6}
         [:> Button {:variant :outlined
-                    :on-click #(swap! db/app-db update-in [:add-a-service] assoc :degree-holder-consent? false)}
+                    :on-click #(swap! db/app-db update-in [:provide-service] assoc :degree-holder-consent? false)}
          "NO"]]]]]]])

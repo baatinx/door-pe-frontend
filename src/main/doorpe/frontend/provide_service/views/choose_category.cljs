@@ -1,4 +1,4 @@
-(ns doorpe.frontend.add-a-service.views.choose-category
+(ns doorpe.frontend.provide-service.views.choose-category
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [reagent.core :as reagent]
             [cljs-http.client :as http]
@@ -30,7 +30,7 @@
 
     [:> Button {:variant :contained
                 :color :primary
-                :on-click #(swap! db/app-db update-in [:add-a-service] assoc :category-id _id)}
+                :on-click #(swap! db/app-db update-in [:provide-service] assoc :category-id _id)}
      "Select"]]])
 
 (defn fetch-categories

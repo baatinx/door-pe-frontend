@@ -19,7 +19,7 @@
             categories (:body res)]
         (reset! all-categories {:catagories categories}))))
 
-(defn add-service
+(defn provide-service
   [{:keys [name category-id charge-type critical-service description]}]
   (go (let [my-file  (-> (.getElementById js/document "my-file")
                          .-files first)
@@ -109,7 +109,7 @@
                            :label "Service Description"
                            :on-change #(swap! values assoc :description (.. % -target -value))
                            :multiline true
-                           :placeholder " Add Service Description ..."
+                           :placeholder " provide service Description ..."
                            :rows :10
                            :style {:width :500px}}]
             [:br]
@@ -122,5 +122,5 @@
             [:br]
             [:> Button {:variant :contained
                         :color :secondary
-                        :on-click #(add-service @values)}
-             "Add Service"]]]]]))))
+                        :on-click #(provide-service @values)}
+             "provide service"]]]]]))))

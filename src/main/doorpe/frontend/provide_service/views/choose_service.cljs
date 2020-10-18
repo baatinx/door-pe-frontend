@@ -1,4 +1,4 @@
-(ns doorpe.frontend.add-a-service.views.choose-service
+(ns doorpe.frontend.provide-service.views.choose-service
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [reagent.core :as reagent]
             [cljs-http.client :as http]
@@ -31,15 +31,15 @@
     [:> Button {:variant :contained
                 :color :primary
                 :on-click #(do
-                             (swap! db/app-db update-in [:add-a-service] assoc :service-id _id)
-                             (swap! db/app-db update-in [:add-a-service] assoc :by-default-critical-service? critical-service)
-                             (swap! db/app-db update-in [:add-a-service] assoc :charge-type charge-type))}
+                             (swap! db/app-db update-in [:provide-service] assoc :service-id _id)
+                             (swap! db/app-db update-in [:provide-service] assoc :by-default-critical-service? critical-service)
+                             (swap! db/app-db update-in [:provide-service] assoc :charge-type charge-type))}
      "Select"]]])
 
 (defn fetch-services
   []
   (go
-    (let [category-id (get-in @db/app-db [:add-a-service :category-id])
+    (let [category-id (get-in @db/app-db [:provide-service :category-id])
           url (str backend-domain "/all-services-by-category-id/" category-id)
           res (<! (http/get url {:with-credentials? false}))
           _ (swap! services assoc :services (:body res))])))
@@ -52,7 +52,7 @@
         [:<>
          [:> Button {:variant :contained
                      :color :secondary
-                     :on-click #(swap! db/app-db update-in [:add-a-service] dissoc :category-id)}
+                     :on-click #(swap! db/app-db update-in [:provide-service] dissoc :category-id)}
           "Go Back"]
          [:div {:style {:display :flex}}
           `[:<> ~@(map render-services services)]]]))))

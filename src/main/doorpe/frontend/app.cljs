@@ -3,6 +3,7 @@
             [secretary.core :as secretary]
             [accountant.core :as accountant]
             [reagent.core :as reagent]
+            [clerk.core :as clerk]
 
             [doorpe.frontend.nav.nav :refer [nav]]
             [doorpe.frontend.footer.footer :refer [footer]]
@@ -21,7 +22,7 @@
             [doorpe.frontend.my-profile.my-profile :refer [my-profile]]
             [doorpe.frontend.my-bookings.my-bookings :refer [my-bookings]]
             [doorpe.frontend.book-a-service.book-a-service :refer [book-a-service]]
-            [doorpe.frontend.add-a-service.add-a-service :refer [add-a-service]]
+            [doorpe.frontend.provide-service.provide-service :refer [provide-service]]
             [doorpe.frontend.auth.logout :refer [logout]]
 
             [doorpe.frontend.admin-add.admin-add :refer [admin-add]]
@@ -75,8 +76,8 @@
   (secretary/defroute "/book-a-service" []
     (reset! page #'book-a-service))
 
-  (secretary/defroute "/add-a-service" []
-    (reset! page #'add-a-service))
+  (secretary/defroute "/provide-service" []
+    (reset! page #'provide-service))
 
   (secretary/defroute "/my-profile" []
     (reset! page #'my-profile))
@@ -96,9 +97,12 @@
 (defn ^:dev/after-load start
   []
   (app-routes)
+  (clerk/initialize!)
   (accountant/configure-navigation!
    {:nav-handler (fn [path]
-                   (secretary/dispatch! path))
+                   (reagent/after-render clerk/after-render!)
+                   (secretary/dispatch! path)
+                   (clerk/navigate-page! path))
     :path-exists? (fn [path]
                     (secretary/locate-route path))
     :reload-same-path? true})

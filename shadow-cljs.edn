@@ -10,7 +10,8 @@
   [clj-commons/secretary "1.2.4"]
   [venantius/accountant "0.2.5"]
 ;;   [cljs-ajax "0.8.1"]
-  [cljs-http "0.1.46"]]
+  [cljs-http "0.1.46"]
+  [pez/clerk "1.0.0"]]
 
  :dev-http {8000 "public"}
  :builds

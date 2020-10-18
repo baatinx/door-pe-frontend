@@ -1,4 +1,4 @@
-(ns doorpe.frontend.add-a-service.views.confirm-service
+(ns doorpe.frontend.provide-service.views.confirm-service
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
@@ -11,14 +11,14 @@
             ["@material-ui/core" :refer [Grid Container Paper Typography Label Card CardContent TextField Button MenuItem
                                          Select FormControl  Grid Card CardContent CardAction]]))
 
-(defn dispatch-add-a-service
+(defn dispatch-provide-service
   [{:keys [service-charges charges experience service-intro degree-title]}]
-  (go (let [url (str backend-domain "/add-a-service")
-            add-a-service (:add-a-service @db/app-db)
-            by-default-critical-service? (:by-default-critical-service? add-a-service)
-            degree-holder-consent? (:degree-holder-consent? add-a-service)
-            charge-type (:charge-type add-a-service)
-            service-id (:service-id add-a-service)
+  (go (let [url (str backend-domain "/provide-service")
+            provide-service (:provide-service @db/app-db)
+            by-default-critical-service? (:by-default-critical-service? provide-service)
+            degree-holder-consent? (:degree-holder-consent? provide-service)
+            charge-type (:charge-type provide-service)
+            service-id (:service-id provide-service)
             base-doc {:service-id service-id
                       :service-charges service-charges
                       :experience experience
@@ -43,17 +43,17 @@
 
 (defn confirm-service
   []
-  (let [add-a-service (:add-a-service @db/app-db)
-        by-default-critical-service? (:by-default-critical-service? add-a-service)
-        degree-holder-consent? (:degree-holder-consent? add-a-service)
-        charge-type (:charge-type add-a-service)
+  (let [provide-service (:provide-service @db/app-db)
+        by-default-critical-service? (:by-default-critical-service? provide-service)
+        degree-holder-consent? (:degree-holder-consent? provide-service)
+        charge-type (:charge-type provide-service)
         initial-vaules {:service-charges "" :charges "" :experience "" :service-intro "" :degree-tittle ""}
         values (reagent/atom initial-vaules)]
     [:> Container {:maxWidth "sm"}
      [:> Paper {:variant :outlined
                 :square true}
       [:> Typography
-       "Add Service"]
+       "provide service"]
 
       [:br]
 
@@ -112,5 +112,5 @@
 
       [:> Button {:variant :contained
                   :color :primary
-                  :on-click #(dispatch-add-a-service @values)}
+                  :on-click #(dispatch-provide-service @values)}
        "Register"]]]))
