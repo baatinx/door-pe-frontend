@@ -96,6 +96,6 @@
         [:> Button {:variant "contained"
                     :color :primary
                     :style {:margin " 100px 50px"}
-                    :on-click #(do (swap! db/app-db assoc :book-a-service nil)
-                                   (accountant/navigate! "/book-a-service"))}
+                    :on-click #(do (swap! db/app-db assoc :book-service nil)
+                                   (accountant/navigate! "/book-service"))}
          "Book a new service"]]])))

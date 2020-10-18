@@ -1,4 +1,4 @@
-(ns doorpe.frontend.book-a-service.views.confirm-booking
+(ns doorpe.frontend.book-service.views.confirm-booking
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
@@ -31,12 +31,12 @@
 
 (defn make-booking
   [date time]
-  (go (let [url (str backend-domain "/book-a-service")
+  (go (let [url (str backend-domain "/book-service")
             customer-id (:user-id @auth/auth-state)
-            service-id (get-in @db/app-db [:book-a-service :service-id])
-            service-provider-id (get-in @db/app-db [:book-a-service :service-provider-id])
-            service-charges (get-in @db/app-db [:book-a-service :service-charges])
-            charges (get-in @db/app-db [:book-a-service :charges])
+            service-id (get-in @db/app-db [:book-service :service-id])
+            service-provider-id (get-in @db/app-db [:book-service :service-provider-id])
+            service-charges (get-in @db/app-db [:book-service :service-charges])
+            charges (get-in @db/app-db [:book-service :charges])
             latitude (:latitude @location-coords)
             longitude  (:longitude @location-coords)
             res (<! (http/post url {:with-credentials? false
@@ -57,7 +57,7 @@
           (accountant/navigate! "/my-bookings")
           (do
             (js/alert ":-( Booking Failed, please try agian later")
-            (swap! db/app-db :assoc :book-a-service nil)
+            (swap! db/app-db :assoc :book-service nil)
             (accountant/navigate! "/dashboard"))))))
 
 (defn confirm-booking
@@ -67,7 +67,7 @@
     [:> Container {:maxWidth "sm"}
      [:> Button {:variant :contained
                  :color :secondary
-                 :on-click #(swap! db/app-db update-in [:book-a-service] dissoc :service-provider-id)}
+                 :on-click #(swap! db/app-db update-in [:book-service] dissoc :service-provider-id)}
       "back"]
 
      [:br]

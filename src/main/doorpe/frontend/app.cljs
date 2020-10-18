@@ -21,7 +21,7 @@
             [doorpe.frontend.dashboard.dashboard :refer [dashboard]]
             [doorpe.frontend.my-profile.my-profile :refer [my-profile]]
             [doorpe.frontend.my-bookings.my-bookings :refer [my-bookings]]
-            [doorpe.frontend.book-a-service.book-a-service :refer [book-a-service]]
+            [doorpe.frontend.book-service.book-service :refer [book-service]]
             [doorpe.frontend.provide-service.provide-service :refer [provide-service]]
             [doorpe.frontend.auth.logout :refer [logout]]
 
@@ -73,8 +73,8 @@
   (secretary/defroute "/my-bookings" []
     (reset! page #'my-bookings))
 
-  (secretary/defroute "/book-a-service" []
-    (reset! page #'book-a-service))
+  (secretary/defroute "/book-service" []
+    (reset! page #'book-service))
 
   (secretary/defroute "/provide-service" []
     (reset! page #'provide-service))

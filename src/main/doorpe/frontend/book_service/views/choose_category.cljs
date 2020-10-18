@@ -1,18 +1,19 @@
-(ns doorpe.frontend.book-a-service.views.choose-service
+(ns doorpe.frontend.book-service.views.choose-category
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [reagent.core :as reagent]
             [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
             [accountant.core :as accountant]
+            [clojure.string :as string]
             [doorpe.frontend.db :as db]
             [doorpe.frontend.util :refer [backend-domain]]
             ["@material-ui/core" :refer [Grid Container Typography Card CardContent TextField Button MenuItem
                                          Select FormControl  Grid Card CardContent CardAction]]))
 
-(def services (reagent/atom {:services nil}))
+(def categories (reagent/atom {:categories nil}))
 
-(defn render-services
-  [{:keys [_id name description img]}]
+(defn render-categories
+ [{:keys [_id name description img]}]
   [:> Card {:variant :outlined
             :style {:max-width :400px
                     :margin "30px"}}
@@ -30,26 +31,20 @@
 
     [:> Button {:variant :contained
                 :color :primary
-                :on-click #(swap! db/app-db update-in [:book-a-service] assoc :service-id _id)}
+                :on-click #(swap! db/app-db update-in [:book-service] assoc :category-id _id)}
      "Select"]]])
 
-(defn fetch-services
+(defn fetch-categories
   []
   (go
-    (let [category-id (get-in @db/app-db [:book-a-service :category-id])
-          url (str backend-domain "/all-services-by-category-id/" category-id)
+    (let [url (str backend-domain "/all-categories")
           res (<! (http/get url {:with-credentials? false}))
-          _ (swap! services assoc :services (:body res))])))
+          _ (swap! categories assoc :categories (:body res))])))
 
-(defn choose-service
+(defn choose-category
   []
-  (let [_ (fetch-services)]
+  (let [_ (fetch-categories)]
     (fn []
-      (let [services (:services @services)]
-        [:<>
-         [:> Button {:variant :contained
-                     :color :secondary
-                     :on-click #(swap! db/app-db update-in [:book-a-service] dissoc :category-id)}
-          "Go Back"]
-         [:div {:style {:display :flex}}
-          `[:<> ~@(map render-services services)]]]))))
+      (let [categories (:categories @categories)]
+        [:div {:style {:display :flex}}
+         `[:<> ~@(map render-categories categories)]]))))

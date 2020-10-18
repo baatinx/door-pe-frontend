@@ -1,4 +1,4 @@
-(ns doorpe.frontend.book-a-service.views.choose-service-provider
+(ns doorpe.frontend.book-service.views.choose-service-provider
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [reagent.core :as reagent]
             [cljs-http.client :as http]
@@ -50,15 +50,15 @@
     [:> Button {:variant :contained
                 :color :primary
                 :on-click #(do
-                             (swap! db/app-db update-in [:book-a-service] assoc :service-provider-id _id)
-                             (swap! db/app-db update-in [:book-a-service] assoc :service-charges service-charges)
-                             (swap! db/app-db update-in [:book-a-service] assoc :charges charges))}
+                             (swap! db/app-db update-in [:book-service] assoc :service-provider-id _id)
+                             (swap! db/app-db update-in [:book-service] assoc :service-charges service-charges)
+                             (swap! db/app-db update-in [:book-service] assoc :charges charges))}
      "Select"]]])
 
 (defn fetch-service-providers
   []
   (go
-    (let [service-id (get-in @db/app-db [:book-a-service :service-id])
+    (let [service-id (get-in @db/app-db [:book-service :service-id])
           url (str backend-domain "/all-service-providers-by-service-id/" service-id)
           res (<! (http/get url {:with-credentials? false}))
           _ (swap! service-providers assoc :service-providers (:body res))])))
@@ -71,7 +71,7 @@
         [:<>
          [:> Button {:variant :contained
                      :color :secondary
-                     :on-click #(swap! db/app-db update-in [:book-a-service] dissoc :service-id)}
+                     :on-click #(swap! db/app-db update-in [:book-service] dissoc :service-id)}
           "Go Back"]
          [:div {:style {:display :flex}}
           `[:<> ~@(map render-service-providers service-providers)]]]))))
