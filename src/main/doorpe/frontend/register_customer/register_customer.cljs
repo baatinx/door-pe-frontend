@@ -6,7 +6,7 @@
             [doorpe.frontend.components.util :refer [two-br]]
             [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
-            ["@material-ui/core" :refer [Container Typography TextField Button MenuItem Paper Checkbox FormControlLabel
+            ["@material-ui/core" :refer [Container Typography TextField Button MenuItem Paper Checkbox FormControlLabel Link
                                          Select FormControl  Grid Card CardContent CardAction]]))
 
 (def location-coords (atom {}))
@@ -195,14 +195,25 @@
       [:<>
        [:> Checkbox {:id :otp-checkbox}]
        [:> Typography {:variant :caption
-                       :style {:display :inline-block}} "Send me Voice OTP instead of text SMS"]]
+                       :style {:display :inline-block}} "Send me Voice OTP instead of text SMS"]
+       [:br]
+       [:> Checkbox {:id :terms-and-conditions-checkbox}]
+       [:> Typography {:variant :caption
+                       :style {:display :inline-block}} "I have read and agreed with the "]
+       [:> Link {:href "#"}
+        " terms and conditions *"]]
+
+      [:br]
       [:br]
 
       [:> Button {:variant :contained
                   :color :primary
                   :on-click #(let [password (:password @values)
-                                    re-enter-password (:re-enter-password @values)]
-                                (if (= password re-enter-password)
-                                  (check-validity @values ["name" "contact" "my-file" "address" "password" "re-enter-password"] dispatch-register-as-customer)
-                                  (js/alert "Password Does not Match")))}
+                                   re-enter-password (:re-enter-password @values)
+                                   terms-and-conditions-checkbox? (.-checked (.getElementById js/document "terms-and-conditions-checkbox"))]
+                               (if (= password re-enter-password)
+                                 (if terms-and-conditions-checkbox?
+                                   (check-validity @values ["name" "contact" "my-file" "password" "re-enter-password"] dispatch-register-as-customer)
+                                   (js/alert "Please agree the terms and conditions"))
+                                 (js/alert "Password Does not Match")))}
        "Register"]]]))

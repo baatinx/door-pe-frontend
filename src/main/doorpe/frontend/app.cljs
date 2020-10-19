@@ -13,6 +13,7 @@
             [doorpe.frontend.register-customer.register-customer :refer [register-customer]]
             [doorpe.frontend.register-service-provider.register-service-provider :refer [register-service-provider]]
             [doorpe.frontend.book-complaint.book-complaint :refer [book-complaint]]
+            [doorpe.frontend.check-complaints.check-complaints :refer [check-complaints]]
             [doorpe.frontend.feedback.feedback :refer [feedback]]
             [doorpe.frontend.about-us.about-us :refer [about-us]]
             [doorpe.frontend.contact-us.contact-us :refer [contact-us]]
@@ -92,7 +93,10 @@
     (reset! page #'admin-edit))
 
   (secretary/defroute "/admin-service-requests" []
-    (reset! page #'admin-service-requests)))
+    (reset! page #'admin-service-requests))
+
+  (secretary/defroute "/check-complaints" []
+    (reset! page #'check-complaints)))
 
 (defn ^:dev/after-load start
   []

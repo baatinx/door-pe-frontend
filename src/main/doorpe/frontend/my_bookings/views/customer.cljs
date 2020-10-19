@@ -1,10 +1,10 @@
 (ns doorpe.frontend.my-bookings.views.customer
   (:require-macros [cljs.core.async.macros :refer [go]])
-  (:require [reagent.core :as reagent]
-            [cljs-http.client :as http]
+  (:require [cljs-http.client :as http]
             [accountant.core :as accountant]
             [cljs.core.async :refer [<!]]
             [doorpe.frontend.auth.auth :as auth]
+            [doorpe.frontend.components.no-data-found :refer [no-data-found]]
             [doorpe.frontend.db :as db]
             [doorpe.frontend.util :refer [backend-domain]]
             ["@material-ui/core" :refer [Grid Container Typography Card CardContent TextField Button MenuItem
@@ -86,16 +86,8 @@
   []
   (let [_ (fetch-bookings)]
     (fn []
-      [:div {:style {:display :flex}}
-       `[:<> ~@(map render-my-bookings (:my-bookings @db/app-db))]
-
-       [:> Card {:variant :outlined
-                 :style {:max-width :400px
-                         :margin "30px"
-                         :text-align :center}}
-        [:> Button {:variant "contained"
-                    :color :primary
-                    :style {:margin " 100px 50px"}
-                    :on-click #(do (swap! db/app-db assoc :book-service nil)
-                                   (accountant/navigate! "/book-service"))}
-         "Book a new service"]]])))
+      (let [my-bookings (:my-bookings @db/app-db)]
+        [:div {:style {:display :flex}}
+         (if my-bookings
+           `[:<> ~@(map render-my-bookings my-bookings)]
+           [no-data-found])]))))

@@ -23,13 +23,22 @@
         (reset! all-services {:services services}))))
 
 (defn register-complaint
-  [{:keys [service-id description]}]
+  [{:keys [service-id email description]}]
   (go (let [url (str  backend-domain "/book-complaint")
+            user-name (-> @db/app-db
+                          :my-profile
+                          :name)
             res (<! (http/post url {:with-credentials? false
                                     :headers {"Authorization" (auth/set-authorization)}
                                     :form-params {:service-id service-id
-                                                  :description description}}))]
-        (accountant/navigate! "/dashboard"))))
+                                                  :email email
+                                                  :description description
+                                                  :user-name user-name}}))]
+        (if res
+          (do
+            (js/alert "Thanks, complaint registered admin wil reach you soon via email")
+            (accountant/navigate! "/dashboard"))
+          (js/alert ":-( Something went wrong")))))
 
 (defn render-menu-items
   [{:keys [_id name]}]
@@ -40,7 +49,7 @@
   []
   (let [_ (fetch-all-services)]
     (fn []
-      (let [initial-values {:service-id "" :description ""}
+      (let [initial-values {:service-id "" :email "" :description ""}
             values (reagent/atom initial-values)]
         [:> Container {:maxWidth :sm}
          [:> Card
@@ -51,6 +60,14 @@
                         :on-change #(swap! values assoc :service-id (.. % -target -value))
                         :style {:width :400px}}
              `[:optgroup ~@(map render-menu-items (:services @all-services))]]]
+
+           [:br]
+           [:br]
+
+           [:> TextField {:variant :outlined
+                          :label "Your email"
+                          :type :email
+                          :on-change #(swap! values assoc :email (.. % -target -value))}]
 
            [:br]
            [:br]

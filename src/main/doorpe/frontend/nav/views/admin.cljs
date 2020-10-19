@@ -30,5 +30,7 @@
                               (accountant/navigate! "/admin-edit"))}]
       [nav-link {:text "Service Requests"
                  :on-click #(accountant/navigate! "/admin-service-requests")}]
+      [nav-link {:text "Complaints"
+                 :on-click #(accountant/navigate! "/check-complaints")}]
       [nav-link {:text "Logout"
                  :on-click #(accountant/navigate! "/logout")}]]]]])

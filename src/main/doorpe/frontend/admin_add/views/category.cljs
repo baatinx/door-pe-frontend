@@ -36,7 +36,7 @@
         [:> TextField {:variant :outlined
                        :label "Category Name"
                        :on-change #(swap! values assoc :name (.. % -target -value))
-                       :style {:width :500px}}]
+                       :fullWidth true}]
         [:br]
         [:br]
         [:br]
@@ -49,7 +49,7 @@
                        :multiline true
                        :placeholder " Add Category Description ..."
                        :rows :10
-                       :style {:width :500px}}]
+                       :fullWidth true}]
         [:br]
         [:br]
 

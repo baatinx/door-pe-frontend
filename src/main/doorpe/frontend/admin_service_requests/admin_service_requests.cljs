@@ -3,6 +3,7 @@
   (:require [reagent.core :as reagent]
             [cljs-http.client :as http]
             [doorpe.frontend.auth.auth :as auth]
+            [doorpe.frontend.components.no-data-found :refer [no-data-found]]
             [cljs.core.async :refer [<!]]
             [accountant.core :as accountant]
             [doorpe.frontend.db :as db]
@@ -68,6 +69,7 @@
   (let [_ (fetch-service-requests)]
     (fn []
       (let [service-requests (:service-requests @service-requests)]
-        [:<>
-         [:div {:style {:display :flex}}
-          `[:<> ~@(map render-service-requests service-requests)]]]))))
+        (if (not-empty service-requests)
+          [:div {:style {:display :flex}}
+           `[:<> ~@(map render-service-requests service-requests)]]
+          [no-data-found])))))

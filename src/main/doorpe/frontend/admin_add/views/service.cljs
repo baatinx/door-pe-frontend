@@ -97,7 +97,7 @@
             [:> FormControl {:variant :outlined}
              [:> Select {:native true
                          :on-change #(swap! values assoc :category-id (.. % -target -value))
-                         :style {:width :400px}}
+                         :fullWidth true}
               `[:optgroup ~@(map render-menu-items (:catagories @all-categories))]]]
 
             [:br]
@@ -111,7 +111,7 @@
                            :multiline true
                            :placeholder " provide service Description ..."
                            :rows :10
-                           :style {:width :500px}}]
+                           :fullWidth true}]
             [:br]
             [:br]
 

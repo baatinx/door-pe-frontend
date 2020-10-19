@@ -4,6 +4,7 @@
             [accountant.core :as accountant]
             [cljs.core.async :refer [<!]]
             [doorpe.frontend.auth.auth :as auth]
+            [doorpe.frontend.components.no-data-found :refer [no-data-found]]
             [doorpe.frontend.db :as db]
             [doorpe.frontend.util :refer [backend-domain]]
             ["@material-ui/core" :refer [Grid Container Typography Card CardContent TextField Button MenuItem
@@ -141,4 +142,4 @@
         [:div {:style {:display :flex}}
          (if my-bookings
            `[:<> ~@(map render-my-bookings my-bookings)]
-           [:div "no bookings"])]))))
+           [no-data-found])]))))

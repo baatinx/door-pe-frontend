@@ -290,7 +290,7 @@
                       :color :primary
                       :style {:cursor :pointer}
                       :on-click #(swap! my-profile merge @location-coords)}
-             "Detect current coordinates"]]]
+             "update my home coordinates"]]]
 
           [two-br]
           [:> Button {:variant :contained
