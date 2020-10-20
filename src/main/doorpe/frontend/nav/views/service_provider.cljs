@@ -14,6 +14,8 @@
                  :on-click #(accountant/navigate! "/dashboard")}]
       [nav-link {:text "My Bookings"
                  :on-click #(accountant/navigate! "/my-bookings")}]
+      [nav-link {:text "pay-dues"
+                 :on-click #(accountant/navigate! "/pay-dues")}]
       [nav-link {:text "provide service"
                  :on-click #(do
                               (swap! db/app-db assoc :provide-service nil)

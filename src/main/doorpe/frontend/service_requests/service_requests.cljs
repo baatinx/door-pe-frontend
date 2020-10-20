@@ -1,4 +1,4 @@
-(ns doorpe.frontend.admin-service-requests.admin-service-requests
+(ns doorpe.frontend.service-requests.service-requests
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [reagent.core :as reagent]
             [cljs-http.client :as http]
@@ -6,33 +6,30 @@
             [doorpe.frontend.components.no-data-found :refer [no-data-found]]
             [cljs.core.async :refer [<!]]
             [accountant.core :as accountant]
-            [doorpe.frontend.db :as db]
             [doorpe.frontend.util :refer [backend-domain]]
             ["@material-ui/core" :refer [Grid Container Typography Card CardContent TextField Button MenuItem
                                          Select FormControl  Grid Card CardContent CardAction]]))
 
-(def service-requests (reagent/atom {:service-requests nil}))
+(def all-service-requests (reagent/atom {:all-service-requests nil}))
 
-(defn accept-service
+(defn approve-service-request
   [_id]
-  (go (let [url (str backend-domain "/admin-service-requests")
+  (go (let [url (str backend-domain "/approve-service-request")
             res (<! (http/get url {:with-credentials? false
-                                   :query-params {:action "approve-service"
-                                                  :_id _id}
+                                   :query-params {:_id _id}
                                    :headers {"Authorization" (auth/set-authorization)}}))])
-      (accountant/navigate! "/admin-service-requests")))
+      (accountant/navigate! "/service-requests")))
 
 
-(defn reject-service
+(defn reject-service-request
   [_id]
-  (go (let [url (str backend-domain "/admin-service-requests")
+  (go (let [url (str backend-domain "/reject-service-request")
             res (<! (http/get url {:with-credentials? false
-                                   :query-params {:action "reject-service"
-                                                  :_id _id}
+                                   :query-params {:_id _id}
                                    :headers {"Authorization" (auth/set-authorization)}}))])
-      (accountant/navigate! "/admin-service-requests")))
+      (accountant/navigate! "/service-requests")))
 
-(defn render-service-requests
+(defn render-service-request
   [{:keys [_id service-provider-name service-name service-info]}]
   [:> Card {:variant :outlined
             :style {:max-width :400px
@@ -48,28 +45,28 @@
 
     [:> Button {:variant :contained
                 :color :primary
-                :on-click #(accept-service _id)}
+                :on-click #(approve-service-request _id)}
      "Approve"]
 
     [:> Button {:variant :contained
                 :color :secondary
-                :on-click #(reject-service _id)}
+                :on-click #(reject-service-request _id)}
      "Reject"]]])
 
-(defn fetch-service-requests
+(defn fetch-all-service-requests
   []
   (go
     (let [url (str backend-domain "/all-service-requests")
           res (<! (http/get url {:with-credentials? false
                                  :headers {"Authorization" (auth/set-authorization)}}))]
-      (swap! service-requests assoc :service-requests (:body res)))))
+      (swap! all-service-requests assoc :all-service-requests (:body res)))))
 
-(defn admin-service-requests
+(defn service-requests
   []
-  (let [_ (fetch-service-requests)]
+  (let [_ (fetch-all-service-requests)]
     (fn []
-      (let [service-requests (:service-requests @service-requests)]
-        (if (not-empty service-requests)
+      (let [all-service-requests (:all-service-requests @all-service-requests)]
+        (if (not-empty all-service-requests)
           [:div {:style {:display :flex}}
-           `[:<> ~@(map render-service-requests service-requests)]]
+           `[:<> ~@(map render-service-request all-service-requests)]]
           [no-data-found])))))

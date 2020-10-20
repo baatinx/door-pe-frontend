@@ -24,11 +24,12 @@
             [doorpe.frontend.my-bookings.my-bookings :refer [my-bookings]]
             [doorpe.frontend.book-service.book-service :refer [book-service]]
             [doorpe.frontend.provide-service.provide-service :refer [provide-service]]
+            [doorpe.frontend.pay-dues.pay-dues :refer [pay-dues]]
             [doorpe.frontend.auth.logout :refer [logout]]
 
             [doorpe.frontend.admin-add.admin-add :refer [admin-add]]
             [doorpe.frontend.admin-edit.admin-edit :refer [admin-edit]]
-            [doorpe.frontend.admin-service-requests.admin-service-requests :refer [admin-service-requests]]))
+            [doorpe.frontend.service-requests.service-requests :refer [service-requests]]))
 
 (defonce page (reagent/atom #'home-page))
 
@@ -80,6 +81,9 @@
   (secretary/defroute "/provide-service" []
     (reset! page #'provide-service))
 
+  (secretary/defroute "/pay-dues" []
+    (reset! page #'pay-dues))
+
   (secretary/defroute "/my-profile" []
     (reset! page #'my-profile))
 
@@ -92,8 +96,8 @@
   (secretary/defroute "/admin-edit" []
     (reset! page #'admin-edit))
 
-  (secretary/defroute "/admin-service-requests" []
-    (reset! page #'admin-service-requests))
+  (secretary/defroute "/service-requests" []
+    (reset! page #'service-requests))
 
   (secretary/defroute "/check-complaints" []
     (reset! page #'check-complaints)))

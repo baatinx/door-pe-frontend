@@ -10,7 +10,7 @@
             ["@material-ui/core" :refer [Grid Container Paper Typography Card CardContent TextField Button MenuItem
                                          Select FormControl  Grid Card CardContent CardAction]]))
 
-(def location-coords (atom {}))
+(def location-coords (reagent/atom {}))
 
 (defn success
   [position]

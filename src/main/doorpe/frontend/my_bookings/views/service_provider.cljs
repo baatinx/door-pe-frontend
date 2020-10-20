@@ -1,16 +1,17 @@
 (ns doorpe.frontend.my-bookings.views.service-provider
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [cljs-http.client :as http]
+            [reagent.core :as reagent]
             [accountant.core :as accountant]
             [cljs.core.async :refer [<!]]
             [doorpe.frontend.auth.auth :as auth]
             [doorpe.frontend.components.no-data-found :refer [no-data-found]]
             [doorpe.frontend.db :as db]
             [doorpe.frontend.util :refer [backend-domain]]
-            ["@material-ui/core" :refer [Grid Container Typography Card CardContent TextField Button MenuItem
+            ["@material-ui/core" :refer [Grid Container Typography Card CardContent TextField Button MenuItem Link
                                          Select FormControl  Grid Card CardContent CardAction]]))
 
-(def location-coords (atom {}))
+(def location-coords (reagent/atom {}))
 
 (defn success
   [position]
@@ -57,43 +58,37 @@
   [{:keys [booking-id customer-name customer-address service-name booking-on service-on service-time latitude longitude status img]}]
   [:> Card {:variant :outlined
             :style {:max-width :400px
-                    :margin "30px"}}
+                    :margin "20px"}}
    [:> CardContent
-    [:> Typography {:variant "h6"}
-     service-name]
+    [:> Grid {:container true
+              :style {:text-align :center}}
 
-    [:br]
-    [:> Typography {:variant "button"}
-     (str "Customer Name : " customer-name)]
-
+     [:> Grid {:item true
+               :xs 12}
       [:img {:src img
-             :style {:height :80px}}]
+             :style {:height :100px
+                     :border-radius "50%"}}]]]
 
     [:br]
+    [:> Typography
+     (str "Requested service - " service-name)]
+    [:> Typography
+     (str "Name : " customer-name)]
 
-    [:> Typography {:variant "button"}
+    [:> Typography
      (str "Address : " customer-address)]
 
-    [:br]
-
-    [:> Typography {:variant "button"}
+    [:> Typography
      (str "Booking made on : " booking-on)]
 
-    [:br]
-
-    [:> Typography {:variant "button"}
-     (str "Service on : " service-on)]
-
-    [:br]
-
-    [:> Typography {:variant "button"}
+    [:> Typography
+     (str "Need Service on : " service-on)]
+    [:> Typography
      (str "Service time : " service-time)]
 
-    [:br]
-
-    [:> Typography {:variant "button"}
+    [:> Typography
      (str "Status : " status)]
-    [:br]
+
     [:br]
 
     (let [url (str "https://www.google.com/maps/dir/"
@@ -101,11 +96,13 @@
                    "/"
                    latitude "," longitude
                    "/")]
-      [:> Button {:variant :contained
-                  :color :secondary
-                  :href url
-                  :target "_blank"}
-       "Location coords"])
+      [:> Link {:variant :contained
+                :color :primary
+                :href url
+                :style {:text-decoration :underline
+                        :font-weight :bold}
+                :target "_blank"}
+       "see location coords"])
 
     [:br]
     [:br]
@@ -113,11 +110,12 @@
     (if (= status "pending")
       [:<>
        [:> Button {:variant :contained
-                   :color :secondary
+                   :color :primary
                    :on-click #(accept-booking booking-id)}
         "Accept Booking"]
        [:br]
        [:br]
+
        [:> Button {:variant :contained
                    :color :secondary
                    :on-click #(reject-booking booking-id)}

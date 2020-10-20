@@ -29,7 +29,7 @@
                               (swap! db/app-db assoc :admin-edit "service")
                               (accountant/navigate! "/admin-edit"))}]
       [nav-link {:text "Service Requests"
-                 :on-click #(accountant/navigate! "/admin-service-requests")}]
+                 :on-click #(accountant/navigate! "/service-requests")}]
       [nav-link {:text "Complaints"
                  :on-click #(accountant/navigate! "/check-complaints")}]
       [nav-link {:text "Logout"

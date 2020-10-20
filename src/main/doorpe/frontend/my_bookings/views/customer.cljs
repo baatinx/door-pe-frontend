@@ -24,7 +24,7 @@
           (accountant/navigate! "/dashboard")))))
 
 (defn render-my-bookings
-  [{:keys [booking-id service-provider-name service-provider-address service-name booking-on service-on service-time status img]}]
+  [{:keys [booking-id service-provider-name service-name booking-on service-on service-time status img]}]
   [:> Card {:variant :outlined
             :style {:max-width :400px
                     :margin "30px"}}
@@ -38,11 +38,6 @@
 
     [:img {:src img
            :style {:height :80px}}]
-
-    [:br]
-
-    [:> Typography {:variant "button"}
-     (str "Address : " service-provider-address)]
 
     [:br]
 

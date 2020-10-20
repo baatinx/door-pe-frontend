@@ -9,7 +9,7 @@
             ["@material-ui/core" :refer [Container Typography TextField Button MenuItem Paper Checkbox FormControlLabel Link
                                          Select FormControl  Grid Card CardContent CardAction]]))
 
-(def location-coords (atom {}))
+(def location-coords (reagent/atom {}))
 
 (defn success
   [position]
