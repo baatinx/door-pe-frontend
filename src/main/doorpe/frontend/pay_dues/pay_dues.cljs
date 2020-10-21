@@ -25,16 +25,17 @@
      [:> Paper {:variant :outlined
                 :square true}
       [:> Typography {:variant :h6}
-       "Pay Rupees"]
+       "Enter Amount"]
 
       [:> TextField {:variant :outlined
                      :label "Amount"
-                     :type :text
+                     :type :number
                      :required true
                      :id :name
                      :on-change #(swap! values assoc :amount (.. % -target -value))
                      :helperText ""}]
-
+      [:br]
+      [:br]
       [:> Button {:variant :contained
                   :color :primary
                   :on-click #(pay-pending-dues @values)}

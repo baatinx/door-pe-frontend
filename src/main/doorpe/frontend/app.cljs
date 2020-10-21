@@ -24,6 +24,7 @@
             [doorpe.frontend.my-bookings.my-bookings :refer [my-bookings]]
             [doorpe.frontend.book-service.book-service :refer [book-service]]
             [doorpe.frontend.provide-service.provide-service :refer [provide-service]]
+            [doorpe.frontend.pending-dues.pending-dues :refer [pending-dues]]
             [doorpe.frontend.pay-dues.pay-dues :refer [pay-dues]]
             [doorpe.frontend.auth.logout :refer [logout]]
 
@@ -80,6 +81,9 @@
 
   (secretary/defroute "/provide-service" []
     (reset! page #'provide-service))
+
+  (secretary/defroute "/pending-dues" []
+    (reset! page #'pending-dues))
 
   (secretary/defroute "/pay-dues" []
     (reset! page #'pay-dues))

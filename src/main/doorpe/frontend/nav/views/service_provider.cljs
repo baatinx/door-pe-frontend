@@ -14,6 +14,8 @@
                  :on-click #(accountant/navigate! "/dashboard")}]
       [nav-link {:text "My Bookings"
                  :on-click #(accountant/navigate! "/my-bookings")}]
+      [nav-link {:text "pending-dues"
+                 :on-click #(accountant/navigate! "/pending-dues")}]
       [nav-link {:text "pay-dues"
                  :on-click #(accountant/navigate! "/pay-dues")}]
       [nav-link {:text "provide service"

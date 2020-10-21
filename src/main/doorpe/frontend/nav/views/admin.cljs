@@ -12,6 +12,8 @@
      [:> Container
       [nav-link {:text "Dashboard"
                  :on-click #(accountant/navigate! "/dashboard")}]
+      [nav-link {:text "revenue"
+                 :on-click #(accountant/navigate! "/revenue")}]
       [nav-link {:text "Add new Category"
                  :on-click #(do
                               (swap! db/app-db assoc :admin-add "category")
