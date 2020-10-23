@@ -30,7 +30,7 @@
     (js/navigator.geolocation.getCurrentPosition success error)))
 
 (defn make-booking
-  [date time]
+  [{:keys [date time]}]
   (go (let [url (str backend-domain "/book-service")
             customer-id (:user-id @auth/auth-state)
             service-id (get-in @db/app-db [:book-service :service-id])
@@ -72,8 +72,8 @@
 
      [:br]
 
-      [:> Paper {:variant :outlined
-                    :square true}
+     [:> Paper {:variant :outlined
+                :square true}
 
       [:> Grid {:container true}
        [:> Grid {:item true
@@ -112,11 +112,11 @@
                  :xs 6}
         [:> Button {:variant :contained
                     :color :primary
-                    :on-click #(make-booking
-                                (-> @initial-values
-                                    :date
-                                    str)
-                                (-> @initial-values
-                                    :time
-                                    str))}
+                    :on-click #(let [service-on (-> @initial-values
+                                                    :date
+                                                    js/Date.)
+                                     today   (doto (js/Date.) (.setHours 0 0 0 0))]
+                                 (if (>= service-on today)
+                                   (make-booking @initial-values)
+                                   (js/alert ":-( please choose a valid date")))}
          "Confirm Booking"]]]]]))

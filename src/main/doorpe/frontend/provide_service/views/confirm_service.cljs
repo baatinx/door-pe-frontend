@@ -36,9 +36,7 @@
 
             res (<! (http/post url {:with-credentials? false
                                     :headers {"Authorization" (auth/set-authorization)}
-                                    :multipart-params (seq params)}))
-            _ (js/alert "aldfj")]
-        (js/alert "aldfj")
+                                    :multipart-params (seq params)}))]
         (accountant/navigate! "/dashboard"))))
 
 (defn confirm-service

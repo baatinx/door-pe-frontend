@@ -15,7 +15,7 @@
             res (<! (http/post url  {:with-credentials? false
                                      :headers {"Authorization" (auth/set-authorization)}
                                      :form-params {:amount amount}}))]
-        (accountant/navigate! "/"))))
+        (accountant/navigate! "/pending-dues"))))
 
 (defn pay-dues
   []
