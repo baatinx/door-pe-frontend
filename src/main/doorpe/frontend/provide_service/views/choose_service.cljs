@@ -4,6 +4,8 @@
             [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
             [accountant.core :as accountant]
+            [doorpe.frontend.auth.auth :as auth]
+            [doorpe.frontend.components.no-data-found :refer [no-data-found]]
             [doorpe.frontend.db :as db]
             [doorpe.frontend.util :refer [backend-domain]]
             ["@material-ui/core" :refer [Grid Container Typography Card CardContent TextField Button MenuItem
@@ -40,8 +42,9 @@
   []
   (go
     (let [category-id (get-in @db/app-db [:provide-service :category-id])
-          url (str backend-domain "/all-services-by-category-id/" category-id)
-          res (<! (http/get url {:with-credentials? false}))
+          url (str backend-domain "/provide-service-by-category-id/" category-id)
+          res (<! (http/get url {:with-credentials? false
+                                 :headers {"Authorization" (auth/set-authorization)}}))
           _ (swap! services assoc :services (:body res))])))
 
 (defn choose-service
@@ -55,4 +58,6 @@
                      :on-click #(swap! db/app-db update-in [:provide-service] dissoc :category-id)}
           "Go Back"]
          [:div {:style {:display :flex}}
-          `[:<> ~@(map render-services services)]]]))))
+          (if (pos? (count services))
+            `[:<> ~@(map render-services services)]
+            [no-data-found])]]))))

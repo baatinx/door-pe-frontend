@@ -4,6 +4,7 @@
             [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
             [accountant.core :as accountant]
+            [doorpe.frontend.components.no-data-found :refer [no-data-found]]
             [doorpe.frontend.db :as db]
             [doorpe.frontend.util :refer [backend-domain]]
             ["@material-ui/core" :refer [Grid Container Typography Card CardContent TextField Button MenuItem
@@ -47,4 +48,6 @@
     (fn []
       (let [categories (:categories @categories)]
         [:div {:style {:display :flex}}
-         `[:<> ~@(map render-categories categories)]]))))
+         (if (pos? (count categories))
+           `[:<> ~@(map render-categories categories)]
+           [no-data-found])]))))
