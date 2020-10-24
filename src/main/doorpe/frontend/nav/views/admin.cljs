@@ -14,22 +14,14 @@
                  :on-click #(accountant/navigate! "/dashboard")}]
       [nav-link {:text "revenue"
                  :on-click #(accountant/navigate! "/revenue")}]
-      [nav-link {:text "Add new Category"
+      [nav-link {:text "Add Category"
                  :on-click #(do
                               (swap! db/app-db assoc :admin-add "category")
                               (accountant/navigate! "/admin-add"))}]
-      [nav-link {:text "Add new Service"
+      [nav-link {:text "Add Service"
                  :on-click #(do
                               (swap! db/app-db assoc :admin-add "service")
                               (accountant/navigate! "/admin-add"))}]
-      [nav-link {:text "Edit Category"
-                 :on-click #(do
-                              (swap! db/app-db assoc :admin-edit "category")
-                              (accountant/navigate! "/admin-edit"))}]
-      [nav-link {:text "Edit Service"
-                 :on-click #(do
-                              (swap! db/app-db assoc :admin-edit "service")
-                              (accountant/navigate! "/admin-edit"))}]
       [nav-link {:text "Service Requests"
                  :on-click #(accountant/navigate! "/service-requests")}]
       [nav-link {:text "Complaints"

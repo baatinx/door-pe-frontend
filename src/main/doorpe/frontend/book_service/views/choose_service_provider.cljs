@@ -17,16 +17,24 @@
             :style {:max-width :400px
                     :margin "30px"}}
    [:> CardContent
-    [:> Typography {:variant "h5"}
+    [:> Typography {:variant :button}
      name]
-    [:img {:src img
-           :style {:height :80px}}]
+    [:br]
+    [:div {:style {:text-align :center}}
+     [:img {:src img
+            :style {:height :100px}}]]
 
     [:br]
-    [:> Typography {:variant "body1"}
+    [:> Typography {:variant :caption}
      service-intro]
 
     [:br]
+
+    (if  (= "true" (str professional-degree-holder))
+      [:> Typography {:variant :button
+                      :style {:color "forestgreen"}}
+       "Professional Degree Holder"])
+
     [:> Typography
      (str "Service Charges : " service-charges)]
 
@@ -35,17 +43,14 @@
        (str "Charges : " charges)]
 
       [:> Typography {:color :secondary
-                      :style {:font-weight :bold}}
+                      :variant :button}
        (str "Charges : On Inspection ")])
 
     [:> Typography
      (str "Experience : " experience)]
 
     [:> Typography
-     (str "Professional Degree Holder: " professional-degree-holder)]
-
-    [:> Typography
-     (str "District : " district)]
+     (str "From : " district)]
 
     [:> Button {:variant :contained
                 :color :primary

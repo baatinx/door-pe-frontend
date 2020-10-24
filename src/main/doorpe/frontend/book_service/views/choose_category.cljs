@@ -15,18 +15,21 @@
 (defn render-categories
  [{:keys [_id name description img]}]
   [:> Card {:variant :outlined
-            :style {:max-width :400px
-                    :margin "30px"}}
+            :style {:max-width :350px
+
+                    :margin "5px"}}
    [:> CardContent
     [:img {:src img
-           :style {:height :250px}}]
-    [:> Typography {:variant "h5"}
+           :height :200px
+           :style {:width "100%"}}]
+    [:> Typography {:variant :button}
      name]
-
     [:br]
-    [:> Typography {:variant "body1"}
+
+    [:> Typography {:variant "caption"}
      description]
 
+    [:br]
     [:br]
 
     [:> Button {:variant :contained

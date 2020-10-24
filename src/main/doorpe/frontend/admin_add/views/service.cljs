@@ -123,4 +123,4 @@
             [:> Button {:variant :contained
                         :color :secondary
                         :on-click #(provide-service @values)}
-             "provide service"]]]]]))))
+             "add service"]]]]]))))

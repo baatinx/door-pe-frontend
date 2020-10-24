@@ -14,16 +14,16 @@
 (defn render-services
   [{:keys [_id name description critical-service charge-type img]}]
   [:> Card {:variant :outlined
-            :style {:max-width :400px
+            :style {:max-width :350px
                     :margin "30px"}}
    [:> CardContent
-     [:img {:src img
-            :style {:height :250px}}]
-    [:> Typography {:variant "h5"}
+    [:img {:src img
+           :style {:height :250px}}]
+    [:> Typography {:variant :button}
      name]
-
     [:br]
-    [:> Typography {:variant "body1"}
+
+    [:> Typography {:variant :caption}
      description]
 
     [:br]

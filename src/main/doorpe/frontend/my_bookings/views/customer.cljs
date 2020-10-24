@@ -30,35 +30,38 @@
             :style {:max-width :400px
                     :margin "30px"}}
    [:> CardContent
-    [:> Typography {:variant "h6"}
-     service-name]
+    [:> Grid {:container true
+              :style {:text-align :center}}
+     [:> Grid {:item true
+               :xs 12}
+      [:img {:src img
+             :style {:height :100px
+                     :border-radius "50%"}}]]]
 
     [:br]
     [:> Typography {:variant "button"}
+     (str "Requested service - " service-name)]
+
+    [:> Typography
      (str "Service Provider : " service-provider-name)]
 
-    [:img {:src img
-           :style {:height :80px}}]
-
-    [:br]
-
-    [:> Typography {:variant "button"}
+    [:> Typography
      (str "Booking made on : " booking-on)]
 
-    [:br]
-
-    [:> Typography {:variant "button"}
+    [:> Typography
      (str "Service on : " service-on)]
 
-    [:br]
-
-    [:> Typography {:variant "button"}
+    [:> Typography
      (str "Service time : " service-time)]
 
-    [:br]
+    (if (= "accepted" (.toLowerCase status))
+      [:> Typography {:variant :button
+                      :color :primary}
+       (str "Status : " status)]
+      [:> Typography {:variant :button
+                      :color :secondary}
+       (str "Status : " status)])
 
-    [:> Typography {:variant "button"}
-     (str "Status : " status)]
     [:br]
     [:br]
 

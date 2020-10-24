@@ -20,8 +20,7 @@
             res (<! (http/post url  {:with-credentials? false
                                      :headers {"Authorization" (auth/set-authorization)}
                                      :form-params {:complaint-id complaint-id
-                                                   :admin-reply admin-reply}}))
-            _ (js/alert res)]
+                                                   :admin-reply admin-reply}}))]
         (accountant/navigate! "/check-complaints"))))
 
 (defn render-complaints

@@ -19,13 +19,16 @@
    [:> CardContent
     [:img {:src img
            :style {:height :250px}}]
-    [:> Typography {:variant "h5"}
-     name]
-
     [:br]
-    [:> Typography {:variant "body1"}
+
+    [:> Typography {:variant :button}
+     name]
+    [:br]
+
+    [:> Typography {:variant "caption"}
      description]
 
+    [:br]
     [:br]
 
     [:> Button {:variant :contained
