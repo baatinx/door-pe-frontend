@@ -7,7 +7,7 @@
             [doorpe.frontend.util :refer [backend-domain]]
             [doorpe.frontend.db :as db]
             [doorpe.frontend.auth.auth :as auth]
-            ["@material-ui/core" :refer [Grid Container Paper Typography Card CardContent TextField Button MenuItem
+            ["@material-ui/core" :refer [Grid Container Paper Typography Card CardContent TextField Button MenuItem Checkbox
                                          Select FormControl  Grid Card CardContent CardAction]]))
 
 (def location-coords (reagent/atom {}))
@@ -17,8 +17,8 @@
   (let [coords position.coords
         latitude coords.latitude
         longitude coords.longitude]
-    (reset! location-coords {:latitude (str latitude)
-                             :longitude (str longitude)})))
+    (reset! location-coords {:current-latitude (str latitude)
+                             :current-longitude (str longitude)})))
 
 (defn error
   [err]
@@ -32,24 +32,32 @@
 (defn make-booking
   [{:keys [date time]}]
   (go (let [url (str backend-domain "/book-service")
+            coords-checkbox? (.-checked (.getElementById js/document "coords-checkbox"))
             customer-id (:user-id @auth/auth-state)
             service-id (get-in @db/app-db [:book-service :service-id])
             service-provider-id (get-in @db/app-db [:book-service :service-provider-id])
             service-charges (get-in @db/app-db [:book-service :service-charges])
             charges (get-in @db/app-db [:book-service :charges])
-            latitude (:latitude @location-coords)
-            longitude  (:longitude @location-coords)
+
+            current-latitude (:current-latitude @location-coords)
+            current-longitude  (:current-longitude @location-coords)
+            doc {:customer-id customer-id
+                 :service-provider-id service-provider-id
+                 :service-id service-id
+                 :service-on date
+                 :service-time time
+                 :service-charges service-charges
+                 :charges charges}
+
+            form-params (if coords-checkbox?
+                          doc
+                          (into doc
+                                {:current-latitude current-latitude
+                                 :current-longitude current-longitude}))
+
             res (<! (http/post url {:with-credentials? false
                                     :headers {"Authorization" (auth/set-authorization)}
-                                    :form-params {:customer-id customer-id
-                                                  :service-provider-id service-provider-id
-                                                  :service-id service-id
-                                                  :service-on date
-                                                  :service-time time
-                                                  :service-charges service-charges
-                                                  :charges charges
-                                                  :latitude latitude
-                                                  :longitude longitude}}))
+                                    :form-params form-params}))
             insert-status (-> res
                               :body
                               :status)]
@@ -102,6 +110,13 @@
          {:variant :outlined
           :type :time
           :on-change #(swap! initial-values assoc :time (.. % -target -value))}]]]
+
+
+      [:br]
+
+      [:> Checkbox {:id :coords-checkbox}]
+      [:> Typography {:variant :caption
+                      :style {:display :inline-block}} "Use my home coordinates instead of current"]
 
       [:br]
 

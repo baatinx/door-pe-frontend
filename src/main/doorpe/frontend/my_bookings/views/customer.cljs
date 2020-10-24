@@ -19,9 +19,10 @@
                        :body
                        :status)]
         (if status
+          (accountant/navigate! "/my-bookings")
           (do
-            (accountant/navigate! "/my-bookings"))
-          (accountant/navigate! "/dashboard")))))
+            (js/alert ":-( something went wrong")
+            (accountant/navigate! "/dashboard"))))))
 
 (defn render-my-bookings
   [{:keys [booking-id service-provider-name service-name booking-on service-on service-time status img]}]
@@ -61,11 +62,11 @@
     [:br]
     [:br]
 
-    (if (or (= status "pending"))
-      [:> Button {:variant :contained
-                  :color :secondary
-                  :on-click #(cancel-booking booking-id)}
-       "Cancel Booking"])]])
+    (and (= status "pending")
+         [:> Button {:variant :contained
+                     :color :secondary
+                     :on-click #(cancel-booking booking-id)}
+          "Cancel Booking"])]])
 
 (defn fetch-bookings
   []
