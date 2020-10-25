@@ -30,7 +30,8 @@
 
             [doorpe.frontend.admin-add.admin-add :refer [admin-add]]
             [doorpe.frontend.admin-edit.admin-edit :refer [admin-edit]]
-            [doorpe.frontend.service-requests.service-requests :refer [service-requests]]))
+            [doorpe.frontend.service-requests.service-requests :refer [service-requests]]
+            [doorpe.frontend.revenue-generated.revenue-generated :refer [revenue-generated]]))
 
 (defonce page (reagent/atom #'home-page))
 
@@ -104,7 +105,10 @@
     (reset! page #'service-requests))
 
   (secretary/defroute "/check-complaints" []
-    (reset! page #'check-complaints)))
+    (reset! page #'check-complaints))
+
+  (secretary/defroute "/revenue-generated" []
+    (reset! page #'revenue-generated)))
 
 (defn ^:dev/after-load start
   []

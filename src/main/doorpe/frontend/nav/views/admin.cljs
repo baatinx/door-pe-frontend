@@ -13,7 +13,7 @@
       [nav-link {:text "Dashboard"
                  :on-click #(accountant/navigate! "/dashboard")}]
       [nav-link {:text "revenue"
-                 :on-click #(accountant/navigate! "/revenue")}]
+                 :on-click #(accountant/navigate! "/revenue-generated")}]
       [nav-link {:text "Add Category"
                  :on-click #(do
                               (swap! db/app-db assoc :admin-add "category")
