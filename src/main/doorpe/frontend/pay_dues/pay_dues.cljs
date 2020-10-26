@@ -14,7 +14,7 @@
   (go (let [url (str backend-domain "/pay-dues")
             res (<! (http/post url  {:with-credentials? false
                                      :headers {"Authorization" (auth/set-authorization)}
-                                     :form-params {:amount amount}}))]
+                                     :form-params {:pay-amount amount}}))]
         (accountant/navigate! "/pending-dues"))))
 
 (defn pay-dues
